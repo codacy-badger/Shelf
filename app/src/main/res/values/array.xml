@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="ranksort">
+        <item>보유도서순</item>
+        <item>추천수 순</item>
+        <item>즐겨찾기수 순</item>
+    </string-array>
+</resources>
