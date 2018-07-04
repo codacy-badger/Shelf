@@ -3,6 +3,9 @@
 </div>
 
 
+
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+
 # Shelf #
 
 **Shelf** is a Book Management and Social Networking Application. With **Shelf**, you can organize books, or make lists of them. You can also trade books like flee market. Unlike other organizing apps, **Shelf** is easy to customize and extend, and can be updated through Google Play Store application updates.
