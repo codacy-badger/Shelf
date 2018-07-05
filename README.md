@@ -10,7 +10,7 @@
 
 
 [Release Notes](RELEASE.md) |
-[Issues & Bugs](https://github.com/chickenmujoa/Shelf/issues) |
+[Issues & Bugs](https://github.com/matthewsongdev/Shelf/issues) |
 [Roadmap]() |
 [Demo]() |
 [한글]()
@@ -21,7 +21,7 @@
 
 ## Communication
 * GitHub issues: bug reports, usage issues, feature requests
-* Mailing list: [chickenmujoa@gmail.com](mailto:chickenmujoa@gmail.com)
+* Mailing list: [matthewsongdev@gmail.com](mailto:matthewsongdev@gmail.com)
 
 ## Contributing
 Any kind of contribution is welcome. For bug reports, feature requests,
