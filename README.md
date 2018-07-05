@@ -6,6 +6,7 @@
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Join the chat at https://gitter.im/chickenmujoa/Lobby](https://badges.gitter.im/chickenmujoa/Lobby.svg)](https://gitter.im/chickenmujoa/Lobby?utm_source=badge&utm_campaign=pr-badge&utm_content=badge)
+[![KakaoTalk](https://img.shields.io/badge/contact-KakaoTalk-orange.svg)]()
 
 
 # Shelf #
