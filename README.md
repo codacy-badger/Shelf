@@ -19,10 +19,6 @@
 
 **Shelf** is a Book Management and Social Networking Application. With **Shelf**, you can organize books, or make lists of them. You can also trade books like flee market. Unlike other organizing apps, **Shelf** is easy to add, search, and also can be updated through Google Play Store application updates.
 
-
-## Performance
-[Shelf](https://github.com/chickenmujoa/shelf) can organize books, search, and buy e-Books.
-
 ## Communication
 * GitHub issues: bug reports, usage issues, feature requests
 * Mailing list: [chickenmujoa@gmail.com](mailto:chickenmujoa@gmail.com)
