@@ -10,7 +10,7 @@
 
 
 [Release Notes](RELEASE.md) |
-[Issues & Bugs](https://github.com/XiaoMi/mace/issues) |
+[Issues & Bugs](https://github.com/chickenmujoa/Shelf/issues) |
 [Roadmap]() |
 [Demo]() |
 [한글]()
