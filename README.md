@@ -9,6 +9,12 @@
 [![KakaoTalk](https://img.shields.io/badge/contact-KakaoTalk-orange.svg)]()
 
 
+[Release Notes](RELEASE.md) |
+[Issues & Bugs](https://github.com/XiaoMi/mace/issues) |
+[Roadmap]() |
+[Demo]() |
+[한글]()
+
 # Shelf #
 
 **Shelf** is a Book Management and Social Networking Application. With **Shelf**, you can organize books, or make lists of them. You can also trade books like flee market. Unlike other organizing apps, **Shelf** is easy to customize and extend, and can be updated through Google Play Store application updates.
