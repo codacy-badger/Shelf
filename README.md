@@ -31,5 +31,12 @@ strongly suggested to open an issue for discussion first.
 ## License
 [Apache License 2.0](LICENSE).
 
+## Developer
+* Park Ju-yeon
+* Kim Kyung-hwan
+* Kim Tae-ho
+* Park Sung-su
+* Song Yeong-baek
+
 ## Acknowledgement
 
