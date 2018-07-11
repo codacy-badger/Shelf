@@ -18,7 +18,7 @@ android:
     email: false
 
 before_install:
-    - yes | $ANDROID_HOME/tools/bin/sdkmanager "build-tools;27.1.1"
+    - yes | $ANDROID_HOME/tools/bin/sdkmanager "build-tools;26.0.2"
 
 script:
-    - ./gradlew build connectedCheck --info
+    - gradle build connectedCheck
