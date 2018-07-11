@@ -12,7 +12,7 @@ before_install:
 
 script:
     - chmod +x ./gradlew
-    - ./gradlew jacocoTestReport
+    - ./gradlew build jacocoTestReport assembleAndroidTest
 
 after_success:
   - bash <(curl -s https://codecov.io/bash) -t aae31d62-3dc2-4607-896c-a160d5036d20
