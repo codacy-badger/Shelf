@@ -6,8 +6,12 @@ android:
     - build-tools-27.1.1
     - android-27
     - extra
+
+before_install:
+    - pip install --user codecov    #Install codecov
+
 script:
     - chmod +x ./gradlew
 
 after_success:
-    - bash <(curl -s https://codecov.io/bash)
+    - codecov                       #Run codecov
