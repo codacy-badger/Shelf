@@ -14,4 +14,4 @@ script:
     - chmod +x ./gradlew
 
 after_success:
-    - codecov                       #Run codecov
+  - bash <(curl -s https://codecov.io/bash) -t aae31d62-3dc2-4607-896c-a160d5036d20
