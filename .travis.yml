@@ -1,4 +1,5 @@
 language: android
+sudo: required
 android:
   components:
   - tools
@@ -7,4 +8,4 @@ android:
   - android-27
   - extra
 script:
-  - ./gradlew assembleDebug
+  - ./gradlew build
