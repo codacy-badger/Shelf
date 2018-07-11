@@ -44,7 +44,7 @@ licenses:
     - 'google-gdk-license-.+'
 
 before_install:
-    - chrmod +x gradlew
+    - chmod +x gradlew
     - pip install --user codecov    #Install codecov
     - android list targets
     - echo no | android create avd --force -n test -t android-19 --abi armeabi-v7a
@@ -61,7 +61,7 @@ script:
     - echo "Travis branch is $TRAVIS_BRANCH"
     - echo "Travis branch is in pull request $TRAVIS_PULL+REQUEST"
     - android-wait-for-emulator
-    - adb devices   #Display list of devices
+    - adb devices                   #Display list of devices
     - adb shell input keyevent 82 &
     - ./gradlew
 
