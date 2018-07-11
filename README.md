@@ -5,6 +5,7 @@
 
 [![Build Status](https://travis-ci.com/matthewsongdev/Shelf.svg?token=NaLLKsT8zKVhv8seuCfL&branch=master)](https://travis-ci.com/matthewsongdev/Shelf)
 [![codecov](https://codecov.io/gh/matthewsongdev/Shelf/branch/master/graph/badge.svg?token=ivxZNTFIVr)](https://codecov.io/gh/matthewsongdev/Shelf)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/2aa7397c6e584478946b0f51814050ed)](https://www.codacy.com?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=matthewsongdev/Shelf&amp;utm_campaign=Badge_Grade)
 [![License](https://img.shields.io/badge/License-Apache%202.0-brightgreen.svg)](LICENSE)
 
 
