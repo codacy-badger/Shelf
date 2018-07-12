@@ -42,5 +42,6 @@
 * 박성수
 * 송영백
 
-## 
+## 라이센스
+
 [Apache License 2.0](LICENSE)
