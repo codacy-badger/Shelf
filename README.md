@@ -16,7 +16,7 @@
 [이슈 & 버그](https://github.com/matthewsongdev/Shelf/issues) |
 [로드맵]() |
 [데모]() |
-[English]()
+[English](README-en.md)
 
 # 모두의 서재 #
 
