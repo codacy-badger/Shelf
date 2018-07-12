@@ -1,4 +1,6 @@
 language: android
+sudo: false
+email: false
 android:
   components:
     - tools
@@ -8,10 +10,12 @@ android:
     - extra
 
 before_install:
-    - pip install --user codecov    #Install codecov
+    #Install codecov
+    - pip install --user codecov
 
 script:
     - chmod +x ./gradlew
 
 after_success:
-    - codecov                       #Run codecov
+    #Run codecov
+    - codecov
