@@ -33,7 +33,7 @@ Any kind of contribution is welcome. For bug reports, feature requests,
 please just open an issue without any hesitation. For code contributions, it's
 strongly suggested to open an issue for discussion first.
 
-## Developer
+## Team Chickenmumani
 * Park Ju-yeon
 * Kim Kyung-hwan
 * Kim Tae-ho
