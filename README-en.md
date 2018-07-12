@@ -16,7 +16,7 @@
 [Issues & Bugs](https://github.com/matthewsongdev/Shelf/issues) |
 [Roadmap]() |
 [Demo]() |
-[한글]()
+[한글](README.md)
 
 # Shelf #
 
