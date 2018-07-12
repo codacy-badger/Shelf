@@ -35,7 +35,7 @@ strongly suggested to open an issue for discussion first.
 ## Contact
 * [![Mail](https://img.shields.io/badge/contact-mail-brightgreen.svg)](mailto:matthewsongdev@gmail.com)
 * [![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/MyShelf/Lobby)
-* [![KakaoTalkPlusFriends](https://img.shields.io/badge/KakaoTalk-PlusFriends-orange.svg)]()
+* [![KakaoTalkPlusFriends](https://img.shields.io/badge/KakaoTalk-PlusFriends-orange.svg)](https://pf.kakao.com/_MgxnpC)
 
 ## Developer
 * Park Ju-yeon
