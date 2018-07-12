@@ -41,7 +41,7 @@ strongly suggested to open an issue for discussion first.
 * Park Ju-yeon
 * Kim Kyung-hwan
 * Kim Tae-ho
-* Park Sung-su
+* Park Seong-su
 * Song Yeong-baek
 
 ## License
