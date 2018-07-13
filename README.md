@@ -2,14 +2,9 @@
 <img src="docs/project_logo_4.png" width="300" alt="shelf" />
 </div>
 
-
-[![Build Status](https://travis-ci.com/matthewsongdev/Shelf.svg?token=NaLLKsT8zKVhv8seuCfL&branch=master)](https://travis-ci.com/matthewsongdev/Shelf)
-[![API](https://img.shields.io/badge/API-21%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=21)
-[![codecov](https://codecov.io/gh/matthewsongdev/Shelf/branch/master/graph/badge.svg?token=ivxZNTFIVr)](https://codecov.io/gh/matthewsongdev/Shelf)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/2aa7397c6e584478946b0f51814050ed)](https://www.codacy.com?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=matthewsongdev/Shelf&amp;utm_campaign=Badge_Grade)
-[![CodeFactor](https://www.codefactor.io/repository/github/matthewsongdev/shelf/badge)](https://www.codefactor.io/repository/github/matthewsongdev/shelf)
-[![License](https://img.shields.io/badge/License-Apache%202.0-brightgreen.svg)](LICENSE)
-
+| **`빌드 상태`** | **`최소 API`** | **`코드 커버리지`** | **`코드 완성도`** | **`라이센스`** |
+|----------------|----------------|--------------------|-------------------|---------------|
+| [![Build Status](https://travis-ci.com/matthewsongdev/Shelf.svg?token=NaLLKsT8zKVhv8seuCfL&branch=master)](https://travis-ci.com/matthewsongdev/Shelf) | [![API](https://img.shields.io/badge/API-21%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=21) | [![codecov](https://codecov.io/gh/matthewsongdev/Shelf/branch/master/graph/badge.svg?token=ivxZNTFIVr)](https://codecov.io/gh/matthewsongdev/Shelf) | [![Codacy Badge](https://api.codacy.com/project/badge/Grade/2aa7397c6e584478946b0f51814050ed)](https://www.codacy.com?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=matthewsongdev/Shelf&amp;utm_campaign=Badge_Grade) [![CodeFactor](https://www.codefactor.io/repository/github/matthewsongdev/shelf/badge)](https://www.codefactor.io/repository/github/matthewsongdev/shelf) | [![License](https://img.shields.io/badge/License-Apache%202.0-brightgreen.svg)](LICENSE) |
 
 
 [릴리스 노트](RELEASE.md) |
