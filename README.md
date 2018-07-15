@@ -1,5 +1,5 @@
 <div align="center">
-<img src="docs/project_logo_4.png" width="300" alt="shelf" />
+<img src="docs/shelf_logo_final.jpg" width="300" alt="shelf" />
 </div>
 
 | **`빌드 상태`** | **`최소 API`** | **`코드 커버리지`** | **`코드 완성도`** | **`라이센스`** |
