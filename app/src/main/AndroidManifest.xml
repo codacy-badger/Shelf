@@ -36,8 +36,10 @@
         <activity android:name=".Notice_Content" />
         <activity android:name=".Export_Activity" />
         <activity android:name=".WithDrawal_Activity" />
-        <activity android:name=".Reviewview_Activity"
-            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Reviewview_Activity" />
+        <activity
+            android:name=".BookInfo_Activity"
+            android:theme="@style/myDialog" />
     </application>
 
 </manifest>

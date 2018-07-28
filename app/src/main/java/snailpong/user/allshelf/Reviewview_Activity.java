@@ -3,6 +3,7 @@ package snailpong.user.allshelf;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -13,17 +14,19 @@ public class Reviewview_Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reviewview);
-        Toolbar myToolbar = (Toolbar)findViewById(R.id.my_toolbar);
-        setSupportActionBar(myToolbar);
+        setTitle("리뷰");
+
+        this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.action_back:
-                Toast.makeText(this, "Clicked favorite action item.", Toast.LENGTH_LONG).show();
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
                 return true;
-
             default:
                 return super.onOptionsItemSelected(item);
         }
