@@ -28,19 +28,33 @@
                 android:layout_gravity="center"
                 android:src="@android:drawable/ic_menu_camera" />
 
-
-            <TextView
-                android:id="@+id/textView7"
+            <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_weight="1"
                 android:layout_gravity="center"
-                android:layout_marginLeft="20dp"
-                android:text="박주연 님"
-                android:textSize="30dp" />
+                android:layout_marginLeft="20dp">
+
+                <TextView
+                    android:id="@+id/sec_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="박주연"
+                    android:textSize="30dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_toRightOf="@id/sec_name"
+                    android:text="  님" />
+
+
+            </RelativeLayout>
+
 
             <Button
-                android:id="@+id/textView8"
+                android:id="@+id/naemeditbutton"
                 android:layout_width="60dp"
                 android:layout_marginRight="10dp"
                 android:layout_height="wrap_content"
@@ -137,6 +151,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:id="@+id/lin_withb"
                 android:paddingBottom="15dp"
                 android:paddingTop="15dp">
 
@@ -169,10 +184,13 @@
                 android:background="@android:color/darker_gray" />
 
             <LinearLayout
+                android:id="@+id/lin_exportb"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:paddingBottom="15dp"
+                android:duplicateParentState="true"
+                android:clickable="false"
                 android:paddingTop="15dp">
 
                 <TextView

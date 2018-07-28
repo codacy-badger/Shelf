@@ -57,16 +57,16 @@ public class MainActivity extends AppCompatActivity {
                 }
         );
 
-        /*Button btn_go5 = (Button) findViewById(R.id.mainButton5);
+        Button btn_go5 = (Button) findViewById(R.id.mainButton5);
         btn_go5.setOnClickListener(
                 new Button.OnClickListener() {
                     public void onClick(View v) {
-                        Intent intent = new Intent(v.getContext(), ExportActivity.class);
+                        Intent intent = new Intent(v.getContext(), Export_Activity2.class);
                         startActivity(intent);
                     }
                 }
         );
-
+    /*
         Button btn_go6 = (Button) findViewById(R.id.mainButton6);
         btn_go6.setOnClickListener(
                 new Button.OnClickListener() {

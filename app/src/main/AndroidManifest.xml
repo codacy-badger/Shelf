@@ -24,13 +24,18 @@
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings" />
         <activity
+            android:name=".Export_Activity2"
+            android:label="@string/title_activity_export" />
+        <activity
             android:name=".Logout_Activity"
             android:theme="@style/myDialog" />
         <activity
             android:name=".Message_PopActivity"
             android:theme="@style/myDialog" />
         <activity android:name=".SignUp_Activity" />
-        <activity android:name=".Notice_Content"></activity>
+        <activity android:name=".Notice_Content" />
+        <activity android:name=".Export_Activity" />
+        <activity android:name=".WithDrawal_Activity"></activity>
     </application>
 
 </manifest>
