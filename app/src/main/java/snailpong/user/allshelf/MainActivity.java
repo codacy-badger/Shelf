@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
         btn_go1.setOnClickListener(
                 new Button.OnClickListener() {
                     public void onClick(View v) {
-                        Intent intent = new Intent(v.getContext(), SignUp_Activity.class);
+                        Intent intent = new Intent(v.getContext(), Reviewview_Activity.class);
                         startActivity(intent);
                     }
                 }

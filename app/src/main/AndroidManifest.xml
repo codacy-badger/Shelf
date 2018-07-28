@@ -35,7 +35,9 @@
         <activity android:name=".SignUp_Activity" />
         <activity android:name=".Notice_Content" />
         <activity android:name=".Export_Activity" />
-        <activity android:name=".WithDrawal_Activity"></activity>
+        <activity android:name=".WithDrawal_Activity" />
+        <activity android:name=".Reviewview_Activity"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>
