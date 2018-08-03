@@ -3,7 +3,7 @@ package snailpong.user.allshelf;
 import android.os.Bundle;
 import android.support.v7.preference.PreferenceFragmentCompat;
 
-public class AlarmFragment extends PreferenceFragmentCompat
+public class Alarm_SettingActivity extends PreferenceFragmentCompat
 {
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
