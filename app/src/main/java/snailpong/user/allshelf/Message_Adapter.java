@@ -1,10 +1,12 @@
 package snailpong.user.allshelf;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -34,13 +36,14 @@ public class Message_Adapter extends BaseAdapter {
         // "listview_item" Layout을 inflate하여 convertView 참조 획득.
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.view_notice, parent, false);
+            convertView = inflater.inflate(R.layout.view_alarm, parent, false);
         }
 
 
         // 화면에 표시될 View(Layout이 inflate된)으로부터 위젯에 대한 참조 획득
         TextView msgTextView = (TextView) convertView.findViewById(R.id.alarmview_msg);
         TextView dateTextView = (TextView) convertView.findViewById(R.id.alarmview_date);
+        ImageView imgView = (ImageView) convertView.findViewById(R.id.alarmview_img) ;
 
         // Data Set(listViewItemList)에서 position에 위치한 데이터 참조 획득
         Message_Item listViewItem = listViewItemList.get(position);
@@ -48,6 +51,7 @@ public class Message_Adapter extends BaseAdapter {
         // 아이템 내 각 위젯에 데이터 반영
         msgTextView.setText(listViewItem.getMessage_msg());
         dateTextView.setText(listViewItem.getMessage_date());
+        imgView.setImageDrawable(listViewItem.getIconDrawable());
 
         return convertView;
     }
@@ -65,9 +69,10 @@ public class Message_Adapter extends BaseAdapter {
     }
 
     // 아이템 데이터 추가를 위한 함수. 개발자가 원하는대로 작성 가능.
-    public void addItem(String msg, String date) {
+    public void addItem(Drawable img, String msg, String date) {
         Message_Item item = new Message_Item();
 
+        item.setIconDrawable(img);
         item.setMessage_msg(msg);
         item.setMessage_date(date);
 
