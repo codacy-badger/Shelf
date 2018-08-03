@@ -40,6 +40,8 @@
         <activity
             android:name=".BookInfo_Activity"
             android:theme="@style/myDialog" />
+        <activity android:name=".Report_Activity"
+            android:theme="@style/myDialog" />
     </application>
 
 </manifest>

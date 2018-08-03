@@ -131,12 +131,14 @@
         android:layout_marginTop="30dp">
 
         <Button
+            android:id="@+id/bookinfo_lookre"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:text="리뷰 보기" />
 
         <Button
+            android:id="@+id/bookinfo_writere"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
