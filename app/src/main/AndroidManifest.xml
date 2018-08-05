@@ -33,7 +33,7 @@
             android:name=".Message_PopActivity"
             android:theme="@style/myDialog" />
         <activity android:name=".SignUp_Activity" />
-        <activity android:name=".Notice_Content" />
+        <activity android:name=".Notice_ContentActivity" />
         <activity android:name=".Export_Activity" />
         <activity android:name=".WithDrawal_Activity" />
         <activity android:name=".Reviewview_Activity" />
@@ -43,10 +43,6 @@
         <activity
             android:name=".Report_Activity"
             android:theme="@style/myDialog" />
-        <activity
-            android:name=".Rank_Fragment"
-            android:label="@string/title_activity_rank__fragment"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

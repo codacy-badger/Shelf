@@ -71,13 +71,14 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="15dp">
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="20dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:text="계정정보" />
 
             <View
@@ -89,6 +90,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:paddingBottom="15dp"
                 android:paddingTop="15dp">
 
@@ -120,6 +123,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:paddingBottom="15dp"
                 android:paddingTop="15dp">
 
@@ -152,6 +157,8 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:id="@+id/lin_withb"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:paddingBottom="15dp"
                 android:paddingTop="15dp">
 
@@ -176,6 +183,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="40dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:text="보안" />
 
             <View
@@ -188,6 +197,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:paddingBottom="15dp"
                 android:duplicateParentState="true"
                 android:clickable="false"
@@ -213,6 +224,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:paddingBottom="15dp"
                 android:paddingTop="15dp">
 

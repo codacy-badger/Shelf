@@ -69,9 +69,10 @@ public class Message_Adapter extends BaseAdapter {
     }
 
     // 아이템 데이터 추가를 위한 함수. 개발자가 원하는대로 작성 가능.
-    public void addItem(Drawable img, String msg, String date) {
+    public void addItem(int id, Drawable img, String msg, String date) {
         Message_Item item = new Message_Item();
 
+        item.setId(id);
         item.setIconDrawable(img);
         item.setMessage_msg(msg);
         item.setMessage_date(date);

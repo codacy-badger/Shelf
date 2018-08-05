@@ -65,9 +65,10 @@ public class Notice_Adapter extends BaseAdapter {
     }
 
     // 아이템 데이터 추가를 위한 함수. 개발자가 원하는대로 작성 가능.
-    public void addItem(String title, String date) {
+    public void addItem(int id, String title, String date) {
         Notice_Item item = new Notice_Item();
 
+        item.setId(id);
         item.setTitle(title);
         item.setDate(date);
 
