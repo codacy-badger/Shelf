@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
         btn_go1.setOnClickListener(
                 new Button.OnClickListener() {
                     public void onClick(View v) {
-                        Intent intent = new Intent(v.getContext(), Report_Activity.class);
+                        Intent intent = new Intent(v.getContext(), Search_Activity.class);
                         startActivity(intent);
                     }
                 }

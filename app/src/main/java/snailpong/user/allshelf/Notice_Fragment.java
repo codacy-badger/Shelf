@@ -38,7 +38,7 @@ public class Notice_Fragment extends ListFragment {
         // get TextView's Text.
         Notice_Item item = (Notice_Item)l.getItemAtPosition(position);
         String strText = item.getTitle();
-        Toast.makeText(getActivity(), strText, Toast.LENGTH_LONG).show();
+        //Toast.makeText(getActivity(), strText, Toast.LENGTH_LONG).show();
 
         Intent intent = new Intent(getActivity(),Notice_ContentActivity.class);
         intent.putExtra("id",item.getId());

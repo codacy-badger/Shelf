@@ -36,6 +36,7 @@ public class Rank_Fragment extends Fragment {
         // Setting ViewPager for each Tabs
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.rank_container);
         setupViewPager(viewPager);
+        //getSupportActionBar().setElevation(0);
         // Set Tabs inside Toolbar
         TabLayout tabs = (TabLayout) view.findViewById(R.id.rank_tabs);
         tabs.setupWithViewPager(viewPager);
