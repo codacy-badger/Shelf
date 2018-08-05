@@ -40,8 +40,13 @@
         <activity
             android:name=".BookInfo_Activity"
             android:theme="@style/myDialog" />
-        <activity android:name=".Report_Activity"
+        <activity
+            android:name=".Report_Activity"
             android:theme="@style/myDialog" />
+        <activity
+            android:name=".Rank_Fragment"
+            android:label="@string/title_activity_rank__fragment"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
