@@ -44,7 +44,8 @@
             android:name=".Report_Activity"
             android:theme="@style/myDialog" />
         <activity android:name=".Follwer_Activity" />
-        <activity android:name=".Search_Activity"></activity>
+        <activity android:name=".Search_Activity" />
+        <activity android:name=".Review_WriteActivity"></activity>
     </application>
 
 </manifest>
