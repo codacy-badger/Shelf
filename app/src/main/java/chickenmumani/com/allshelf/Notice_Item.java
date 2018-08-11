@@ -2,13 +2,19 @@ package chickenmumani.com.allshelf;
 
 public class Notice_Item {
 
-    private int id;
+    private String id;
     private String notcontent_title;
     private String notcontent_date;
 
-    public int getId() { return id; }
+    public Notice_Item(String id, String notcontent_title, String notcontent_date) {
+        this.id = id;
+        this.notcontent_title = notcontent_title;
+        this.notcontent_date = notcontent_date;
+    }
 
-    public void setId(int id) { this.id = id; }
+    public String getId() { return id; }
+
+    public void setId(String id) { this.id = id; }
 
     public void setTitle(String title) {
         notcontent_title = title ;

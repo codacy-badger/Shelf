@@ -4,14 +4,21 @@ import android.graphics.drawable.Drawable;
 
 public class Message_Item {
 
-    private int id;
+    private String id;
     private Drawable iconDrawable ;
     private String message_msg;
     private String message_date;
 
-    public int getId() { return id; }
+    public Message_Item(String id, Drawable iconDrawable, String message_msg, String message_date) {
+        this.id = id;
+        this.iconDrawable = iconDrawable;
+        this.message_msg = message_msg;
+        this.message_date = message_date;
+    }
 
-    public void setId(int id) { this.id = id; }
+    public String getId() { return id; }
+
+    public void setId(String id) { this.id = id; }
 
     public Drawable getIconDrawable() {
         return iconDrawable;
