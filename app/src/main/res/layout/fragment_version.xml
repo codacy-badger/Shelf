@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Version_Fragment">
+    tools:context="chickenmumani.com.allshelf.Version_Fragment">
 
     <LinearLayout
         android:layout_width="match_parent"

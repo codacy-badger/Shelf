@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Security_Fragment">
+    tools:context="chickenmumani.com.allshelf.Security_Fragment">
 
     <ScrollView
         android:layout_width="match_parent"

@@ -6,7 +6,7 @@
     android:layout_margin="10dp"
     android:orientation="vertical"
     android:layout_height="wrap_content"
-    tools:context=".Report_Activity">
+    tools:context="chickenmumani.com.allshelf.Report_Activity">
 
     <TextView
         android:layout_width="wrap_content"

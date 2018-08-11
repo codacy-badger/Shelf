@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="snailpong.user.allshelf">
+    package="chickenmumani.com.allshelf">
 
     <application
         android:allowBackup="true"
@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name="chickenmumani.com.allshelf.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -17,35 +17,35 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Navi_Activity"
+            android:name="chickenmumani.com.allshelf.Navi_Activity"
             android:label="@string/title_activity_navi"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".SettingsActivity"
+            android:name="chickenmumani.com.allshelf.SettingsActivity"
             android:label="@string/title_activity_settings" />
         <activity
-            android:name=".Export_Activity2"
+            android:name="chickenmumani.com.allshelf.Export_Activity2"
             android:label="@string/title_activity_export" />
         <activity
-            android:name=".Logout_Activity"
+            android:name="chickenmumani.com.allshelf.Logout_Activity"
             android:theme="@style/myDialog" />
         <activity
-            android:name=".Message_PopActivity"
+            android:name="chickenmumani.com.allshelf.Message_PopActivity"
             android:theme="@style/myDialog" />
-        <activity android:name=".SignUp_Activity" />
-        <activity android:name=".Notice_ContentActivity" />
-        <activity android:name=".Export_Activity" />
-        <activity android:name=".WithDrawal_Activity" />
-        <activity android:name=".Reviewview_Activity" />
+        <activity android:name="chickenmumani.com.allshelf.SignUp_Activity" />
+        <activity android:name="chickenmumani.com.allshelf.Notice_ContentActivity" />
+        <activity android:name="chickenmumani.com.allshelf.Export_Activity" />
+        <activity android:name="chickenmumani.com.allshelf.WithDrawal_Activity" />
+        <activity android:name="chickenmumani.com.allshelf.Reviewview_Activity" />
         <activity
-            android:name=".BookInfo_Activity"
+            android:name="chickenmumani.com.allshelf.BookInfo_Activity"
             android:theme="@style/myDialog" />
         <activity
-            android:name=".Report_Activity"
+            android:name="chickenmumani.com.allshelf.Report_Activity"
             android:theme="@style/myDialog" />
-        <activity android:name=".Follwer_Activity" />
-        <activity android:name=".Search_Activity" />
-        <activity android:name=".Review_WriteActivity"></activity>
+        <activity android:name="chickenmumani.com.allshelf.Follwer_Activity" />
+        <activity android:name="chickenmumani.com.allshelf.Search_Activity" />
+        <activity android:name="chickenmumani.com.allshelf.Review_WriteActivity"></activity>
     </application>
 
 </manifest>

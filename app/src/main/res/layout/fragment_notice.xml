@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Notice_Fragment">
+    tools:context="chickenmumani.com.allshelf.Notice_Fragment">
 
     <ListView
         android:id="@+id/notice_list"

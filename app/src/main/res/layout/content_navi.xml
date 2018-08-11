@@ -8,7 +8,7 @@
     android:id="@+id/content_frame"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/app_bar_navi"
-    tools:context=".MainActivity">
+    tools:context="chickenmumani.com.allshelf.MainActivity">
 
     
 

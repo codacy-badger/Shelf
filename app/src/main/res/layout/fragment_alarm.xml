@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="10dp"
-    tools:context=".Alarm_Fragment">
+    tools:context="chickenmumani.com.allshelf.Alarm_Fragment">
 
     <ListView
         android:layout_width="match_parent"

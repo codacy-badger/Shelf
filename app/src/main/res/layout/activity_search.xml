@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Search_Activity">
+    tools:context="chickenmumani.com.allshelf.Search_Activity">
 
     <RelativeLayout
         android:layout_width="match_parent"
