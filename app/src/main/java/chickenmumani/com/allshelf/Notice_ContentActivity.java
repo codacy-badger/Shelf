@@ -1,5 +1,6 @@
 package chickenmumani.com.allshelf;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -28,10 +29,16 @@ public class Notice_ContentActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        final ProgressDialog dialog = ProgressDialog.show(Notice_ContentActivity.this, "",
+                "Loading... Please wait");
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notice_content);
         setTitle("공지사항");
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
 
         TextView title = (TextView) findViewById(R.id.noticeview_title);
         TextView date = (TextView) findViewById(R.id.noticeview_date);
@@ -60,6 +67,8 @@ public class Notice_ContentActivity extends AppCompatActivity {
                 // Handle any errors
             }
         });
+
+        dialog.dismiss();
 
 
     }

@@ -1,5 +1,6 @@
 package chickenmumani.com.allshelf;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -55,6 +56,10 @@ public class Notice_Fragment extends Fragment {
 
         final ArrayList<Notice_Item> myList = new ArrayList<Notice_Item>();
 
+        final ProgressDialog dialog = ProgressDialog.show(getContext(), "",
+                "Loading... Please wait");
+
+
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference databaseReference = firebaseDatabase.getReference();
         mDatabase = FirebaseDatabase.getInstance().getReference("Notice_Item");
@@ -63,6 +68,8 @@ public class Notice_Fragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 //circle_bar.setVisibility(View.GONE);
+
+
                 myList.clear();
                 for(DataSnapshot ds : dataSnapshot.getChildren()) {
                     Map<String,Object> map = (Map<String,Object>) ds.getValue();
@@ -72,6 +79,7 @@ public class Notice_Fragment extends Fragment {
                 mAdapter = new Notice_Adapter(myList);
                 mRecyclerView.setAdapter(mAdapter);
                 //circle_bar.setVisibility(View.INVISIBLE);
+                dialog.dismiss();
             }
 
             @Override
