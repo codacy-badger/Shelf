@@ -36,7 +36,7 @@ public class Notice_ContentActivity extends AppCompatActivity {
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         final ProgressDialog dialog = ProgressDialog.show(Notice_ContentActivity.this, "",
-                "Loading... Please wait");
+                "Loading... Please wait");          // 프로그레스다이얼로그 생성
 
         TextView title = (TextView) findViewById(R.id.noticeview_title);
         TextView date = (TextView) findViewById(R.id.noticeview_date);
@@ -57,7 +57,7 @@ public class Notice_ContentActivity extends AppCompatActivity {
             public void onSuccess(byte[] bytes) {
                 String str2 = new String(bytes);
                 content.setText(str2);
-                dialog.dismiss();
+                dialog.dismiss();       // 프로그레스다이얼로그 삭제
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
