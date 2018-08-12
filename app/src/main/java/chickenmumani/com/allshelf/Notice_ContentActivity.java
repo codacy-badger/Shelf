@@ -30,15 +30,13 @@ public class Notice_ContentActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        final ProgressDialog dialog = ProgressDialog.show(Notice_ContentActivity.this, "",
-                "Loading... Please wait");
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notice_content);
         setTitle("공지사항");
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
+        final ProgressDialog dialog = ProgressDialog.show(Notice_ContentActivity.this, "",
+                "Loading... Please wait");
 
         TextView title = (TextView) findViewById(R.id.noticeview_title);
         TextView date = (TextView) findViewById(R.id.noticeview_date);
@@ -59,16 +57,18 @@ public class Notice_ContentActivity extends AppCompatActivity {
             public void onSuccess(byte[] bytes) {
                 String str2 = new String(bytes);
                 content.setText(str2);
+                dialog.dismiss();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
                 Log.e("m","Storage Failed");
                 // Handle any errors
+                dialog.dismiss();
             }
         });
 
-        dialog.dismiss();
+
 
 
     }
