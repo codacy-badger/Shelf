@@ -1,7 +1,14 @@
 package chickenmumani.com.allshelf;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.OvalShape;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.View;
@@ -13,11 +20,24 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 import chickenmumani.com.allshelf.R;
 
 public class Navi_Activity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private FirebaseAuth mAuth;
+    Bitmap bitmap;
+    private ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +46,15 @@ public class Navi_Activity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.content_frame, new Shelf_ImageFragment())
+                .commit();
+
+        mAuth = FirebaseAuth.getInstance();
+        final FirebaseUser user = mAuth.getCurrentUser();
+
+        dialog = ProgressDialog.show(Navi_Activity.this, "",
+                "Loading... Please wait");
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -45,6 +74,50 @@ public class Navi_Activity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        View hView =  navigationView.getHeaderView(0);
+
+        TextView name = (TextView) hView.findViewById(R.id.header_name);
+        TextView email = (TextView) hView.findViewById(R.id.header_email);
+        ImageView img = (ImageView) hView.findViewById(R.id.header_img);
+
+        name.setText(user.getDisplayName().toString());
+        email.setText(user.getEmail().toString());
+
+        final Handler handler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                dialog.dismiss();
+            }
+        };
+
+        Thread mThread = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    URL url = new URL(user.getPhotoUrl().toString());
+
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setDoInput(true);
+                    conn.connect();
+
+                    InputStream is = conn.getInputStream();
+                    bitmap = BitmapFactory.decodeStream(is);
+                    handler.sendEmptyMessage(0);
+                } catch (Exception e) { e.printStackTrace(); }
+            }
+        };
+
+        mThread.start();
+
+        try {
+                      // 프로그레스다이얼로그 생성
+            mThread.join();
+            img.setImageBitmap(bitmap);
+            img.setBackground(new ShapeDrawable(new OvalShape()));
+            img.setClipToOutline(true);
+
+            dialog.dismiss();
+        } catch (Exception e) { e.printStackTrace(); }
     }
 
     @Override
@@ -116,9 +189,6 @@ public class Navi_Activity extends AppCompatActivity
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.content_frame, new ClientCenter_Fragment())
                     .commit();
-        } else if (id == R.id.nav_logout) {
-            Intent intent = new Intent(this, Logout_Activity.class);
-            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

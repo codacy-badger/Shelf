@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/layout_main"
     tools:context="chickenmumani.com.allshelf.MainActivity">
 
     <LinearLayout
@@ -11,12 +12,27 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/sign_in_button"
+            android:layout_width="307dp"
+            android:layout_height="54dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.506"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/app_logo"
+            app:layout_constraintVertical_bias="0.692">
+
+        </com.google.android.gms.common.SignInButton>
+
         <TextView
             android:id="@+id/mainoutresult"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_margin="20dp"
+            android:layout_margin="10dp"
             android:text="not provided"/>
 
         <ScrollView
@@ -33,6 +49,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="TEMPPPPPPPAP"/>
+
+                <!--
 
                 <Button
                     android:id="@+id/mainButton2"
@@ -73,11 +91,14 @@
                     android:layout_height="wrap_content"
                     android:text="messagepopactivity"/>
 
+                    !-->
+
                 <Button
                     android:id="@+id/mainButton8"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="naviactivity"/>
+
 
             </LinearLayout>
 
