@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.Display;
+import android.view.MenuItem;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -31,13 +32,13 @@ public class Shelf_BarcodeScanActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shelf_barcodescan);
         setTitle("바코드 촬영");
+        this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
 
         cameraSurface = (SurfaceView) findViewById(R.id.camera_surface);
-        btn = (Button) findViewById(R.id.shelfscan_btn);
 
         BarcodeDetector barcodeDetector = new BarcodeDetector.Builder(this)
                 .setBarcodeFormats(Barcode.EAN_13)
@@ -81,6 +82,8 @@ public class Shelf_BarcodeScanActivity extends AppCompatActivity {
         });
 
         barcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
+            int check = 0;
+
             @Override
             public void release() {
                 Log.d("NowStatus", "BarcodeDetector SetProcessor Released");
@@ -90,20 +93,29 @@ public class Shelf_BarcodeScanActivity extends AppCompatActivity {
             public void receiveDetections(Detector.Detections<Barcode> detections) {
                 final SparseArray<Barcode> barcodes = detections.getDetectedItems();
                 if(barcodes.size() != 0) {
-                    final String barcodeContents = barcodes.valueAt(0).displayValue; // 바코드 인식 결과물
-                    Log.d("Detection", barcodeContents);
+                    if(check == 0) {
+                        check = 1;
+                        final String barcodeContents = barcodes.valueAt(0).displayValue; // 바코드 인식 결과물
+                        Log.d("Detection", barcodeContents);
+                        Intent intent = new Intent(getApplicationContext(),BookInfo_Activity.class);
+                        intent.putExtra("barcodeContents",barcodeContents);
+                        startActivity(intent);
+                        Shelf_BarcodeScanActivity.this.finish();
+                    }
 
-                    btn.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(getApplicationContext(),BookInfo_Activity.class);
-                            intent.putExtra("barcodeContents",barcodeContents);
-                            startActivity(intent);
-                            finish();
-                        }
-                    });
                 }
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

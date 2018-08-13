@@ -49,6 +49,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         mAuth = FirebaseAuth.getInstance();
 
+        /*
+
 
         Button btn_go1 = (Button) findViewById(R.id.mainButton1);
         btn_go1.setOnClickListener(
@@ -72,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 
-        /*Button btn_go2 = (Button) findViewById(R.id.mainButton2);
+        Button btn_go2 = (Button) findViewById(R.id.mainButton2);
         btn_go2.setOnClickListener(
                 new Button.OnClickListener() {
                     public void onClick(View v) {

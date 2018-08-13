@@ -261,6 +261,14 @@ public class BookInfo_Activity extends AppCompatActivity {
         try {
             JSONArray jarray = new JSONObject(res).getJSONArray("item");
 
+            if(jarray.length() == 0) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(BookInfo_Activity.this);     // 여기서 this는 Activity의 this
+                builder .setMessage("정보를 불러오는 중 문제가 발생했습니다. 다시 시도하세요.")
+                        .setCancelable(false)
+                        .setPositiveButton("닫기", null);
+                finish();
+            }
+
             for (int i = 0; i < jarray.length(); i++){
                 HashMap hs = new HashMap<>();
                 JSONObject jObject = jarray.getJSONObject(i);
