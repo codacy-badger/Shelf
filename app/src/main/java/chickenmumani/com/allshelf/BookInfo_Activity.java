@@ -1,5 +1,6 @@
 package chickenmumani.com.allshelf;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -7,6 +8,7 @@ import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -15,12 +17,16 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -56,93 +62,123 @@ public class BookInfo_Activity extends AppCompatActivity {
         Intent intent = getIntent();
         final String ISBN13 = intent.getExtras().getString("barcodeContents");
 
-        AsyncTask.execute(new Runnable() {
+        final RelativeLayout bookinfo_oolin = (RelativeLayout) findViewById(R.id.bookinfo_oolin);
+        final RelativeLayout bookinfo_xxlin = (RelativeLayout) findViewById(R.id.bookinfo_xxlin);
+
+        mAuth = FirebaseAuth.getInstance();
+        final FirebaseUser user = mAuth.getCurrentUser();
+        mDatabase = FirebaseDatabase.getInstance().getReference("User_Book")
+                .child(user.getUid());
+        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void run() {
-                final ArrayList<String> bInfo = aISBNJsonParser(getJsonData(ISBN13));
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        TextView vTitle = (TextView) findViewById(R.id.bookinfo_bookname);
-                        TextView vAuthor = (TextView) findViewById(R.id.bookinfo_author);
-                        TextView vPublisher = (TextView) findViewById(R.id.bookinfo_company);
-                        TextView vPubDate = (TextView) findViewById(R.id.bookinfo_date);
-                        TextView vISBN = (TextView) findViewById(R.id.bookinfo_isbn);
-                        Button vPur = (Button) findViewById(R.id.bookinfo_purchase);
-                        Button vAdd = (Button) findViewById(R.id.bookinfo_regist);
-                        ImageView img = (ImageView) findViewById(R.id.bookinfo_img);
-
-                        vPur.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                Intent intent = new Intent(Intent.ACTION_VIEW);
-                                Uri uri = Uri.parse(bInfo.get(5));
-                                intent.setData(uri);
-                                startActivity(intent);
-                            }
-                        });
-
-                        Thread mThread = new Thread() {
-                            @Override
-                            public void run() {
-                                try {
-                                    URL url = new URL(bInfo.get(6));
-
-                                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                                    conn.setDoInput(true);
-                                    conn.connect();
-
-                                    InputStream is = conn.getInputStream();
-                                    bitmap = BitmapFactory.decodeStream(is);
-                                } catch (Exception e) { e.printStackTrace(); }
-                            }
-                        };
-                        mThread.start();
-                        try {
-                            mThread.join();
-                            img.setImageBitmap(bitmap);
-                        } catch (Exception e) { e.printStackTrace(); }
-
-                        vTitle.setText(bInfo.get(0));
-                        vAuthor.setText(bInfo.get(1));
-                        vPublisher.setText(bInfo.get(2));
-                        vPubDate.setText(bInfo.get(3));
-                        vISBN.setText(bInfo.get(4));
-
-                        vAdd.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                mAuth = FirebaseAuth.getInstance();
-                                final FirebaseUser user = mAuth.getCurrentUser();
-
-                                String getTime = new SimpleDateFormat("yyyy-MM-dd hh:mm").format(new Date(System.currentTimeMillis()));
-
-                                FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-                                DatabaseReference databaseReference = firebaseDatabase.getReference();
-                                mDatabase = FirebaseDatabase.getInstance().getReference("User_Book")
-                                        .child(user.getUid()).child(bInfo.get(4));
-                                mDatabase.child("author").setValue(bInfo.get(1));
-                                mDatabase.child("imgurl").setValue(bInfo.get(6));
-                                mDatabase.child("isbn").setValue(bInfo.get(4));
-                                mDatabase.child("time").setValue(getTime);
-                                mDatabase.child("title").setValue(bInfo.get(0));
-                                finish();
-                            }
-                        });
-                    }
-                });
+            public void onDataChange(DataSnapshot snapshot) {
+                if (snapshot.hasChild(ISBN13)) {
+                    bookinfo_xxlin.setVisibility(View.INVISIBLE);
+                } else {
+                    bookinfo_oolin.setVisibility(View.INVISIBLE);
+                }
             }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
         });
 
-        Button close = (Button) findViewById(R.id.bookinfo_close);
-        close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        try{
+            AsyncTask.execute(new Runnable() {
+                @Override
+                public void run() {
+                    final ArrayList<String> bInfo = aISBNJsonParser(getJsonData(ISBN13));
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            TextView vTitle = (TextView) findViewById(R.id.bookinfo_bookname);
+                            TextView vAuthor = (TextView) findViewById(R.id.bookinfo_author);
+                            TextView vPublisher = (TextView) findViewById(R.id.bookinfo_company);
+                            TextView vPubDate = (TextView) findViewById(R.id.bookinfo_date);
+                            TextView vISBN = (TextView) findViewById(R.id.bookinfo_isbn);
+                            Button vPur = (Button) findViewById(R.id.bookinfo_purchase);
+                            Button vAdd = (Button) findViewById(R.id.bookinfo_regist);
+                            ImageView img = (ImageView) findViewById(R.id.bookinfo_img);
+
+                            vPur.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                                    Uri uri = Uri.parse(bInfo.get(5));
+                                    intent.setData(uri);
+                                    startActivity(intent);
+                                }
+                            });
+
+                            Thread mThread = new Thread() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        URL url = new URL(bInfo.get(6));
+
+                                        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                                        conn.setDoInput(true);
+                                        conn.connect();
+
+                                        InputStream is = conn.getInputStream();
+                                        bitmap = BitmapFactory.decodeStream(is);
+                                    } catch (Exception e) { e.printStackTrace(); }
+                                }
+                            };
+                            mThread.start();
+                            try {
+                                mThread.join();
+                                img.setImageBitmap(bitmap);
+                            } catch (Exception e) { e.printStackTrace(); }
+
+                            vTitle.setText(bInfo.get(0));
+                            vAuthor.setText(bInfo.get(1));
+                            vPublisher.setText(bInfo.get(2));
+                            vPubDate.setText(bInfo.get(3));
+                            vISBN.setText(bInfo.get(4));
+
+                            vAdd.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+
+                                    String getTime = new SimpleDateFormat("yyyy-MM-dd hh:mm").format(new Date(System.currentTimeMillis()));
+
+                                    FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+                                    DatabaseReference databaseReference = firebaseDatabase.getReference();
+                                    mDatabase = FirebaseDatabase.getInstance().getReference("User_Book")
+                                            .child(user.getUid()).child(bInfo.get(4));
+                                    mDatabase.child("author").setValue(bInfo.get(1));
+                                    mDatabase.child("imgurl").setValue(bInfo.get(6));
+                                    mDatabase.child("isbn").setValue(bInfo.get(4));
+                                    mDatabase.child("time").setValue(getTime);
+                                    mDatabase.child("title").setValue(bInfo.get(0));
+                                    finish();
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+
+            Button close = (Button) findViewById(R.id.bookinfo_close);
+            close.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    finish();
+                }
+            });
+        } catch(Exception e) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(BookInfo_Activity.this);     // 여기서 this는 Activity의 this
+            builder .setMessage("정보를 불러오는 중 문제가 발생했습니다. 다시 시도하세요.")
+                    .setCancelable(false)
+                    .setPositiveButton("닫기", null);
+
+            AlertDialog dialog = builder.create();    // 알림창 객체 생성
+            dialog.show();    // 알림창 띄우기
+        }
+
+
     }
 
     @Override

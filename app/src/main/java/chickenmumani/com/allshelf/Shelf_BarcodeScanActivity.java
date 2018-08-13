@@ -2,11 +2,13 @@ package chickenmumani.com.allshelf;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.SparseArray;
+import android.view.Display;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -30,6 +32,10 @@ public class Shelf_BarcodeScanActivity extends AppCompatActivity {
         setContentView(R.layout.activity_shelf_barcodescan);
         setTitle("바코드 촬영");
 
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+
         cameraSurface = (SurfaceView) findViewById(R.id.camera_surface);
         btn = (Button) findViewById(R.id.shelfscan_btn);
 
@@ -42,7 +48,7 @@ public class Shelf_BarcodeScanActivity extends AppCompatActivity {
                 .Builder(this, barcodeDetector)
                 .setFacing(CameraSource.CAMERA_FACING_BACK)
                 .setRequestedFps(0.1f) // 프레임 높을 수록 리소스를 많이 먹겠죠
-                .setRequestedPreviewSize(1080, 1920)
+                .setRequestedPreviewSize(size.x, size.y)
                 .setAutoFocusEnabled(true)  // AutoFocus를 안하면 초점을 못 잡아서 화질이 많이 흐립니다.
                 .build();
         Log.d("NowStatus", "CameraSource Build Complete");

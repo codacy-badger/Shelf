@@ -20,6 +20,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -147,8 +148,11 @@ public class Navi_Activity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
+        FrameLayout shfra = (FrameLayout) findViewById(R.id.shelf_framelay);
+        shfra.setVisibility(View.INVISIBLE);
 
-        if (id == R.id.nav_home) {
+        if (id == R.id.nav_shelf) {
+            shfra.setVisibility(View.VISIBLE);
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.content_frame, new Shelf_ImageFragment())
                     .commit();

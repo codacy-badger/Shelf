@@ -20,7 +20,7 @@
         android:layout_width="100dp"
         android:layout_height="140dp"
         android:layout_gravity="center_horizontal"
-        android:background="@drawable/mumani_background"
+        android:src="@drawable/mumani_background"
         />
 
     <LinearLayout
@@ -105,24 +105,6 @@
         <TextView
             android:layout_width="60dp"
             android:layout_height="wrap_content"
-            android:text="쪽수"/>
-        <TextView
-            android:id="@+id/bookinfo_pages"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="233"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="15dp"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
             android:text="ISBN"/>
         <TextView
             android:id="@+id/bookinfo_isbn"
@@ -131,59 +113,66 @@
             android:text="123-45-67890-01-2"/>
     </LinearLayout>
 
-    <RelativeLayout
-        android:id="@+id/bookinfo_oolin"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:layout_marginTop="30dp">
+        android:layout_marginTop="10dp">
 
-        <Button
-            android:id="@+id/bookinfo_lookre"
-            android:layout_width="100dp"
+        <RelativeLayout
+            android:id="@+id/bookinfo_oolin"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:text="리뷰 보기" />
+            android:gravity="center_horizontal">
 
-        <Button
-            android:id="@+id/bookinfo_writere"
-            android:layout_width="100dp"
+            <Button
+                android:id="@+id/bookinfo_lookre"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:text="리뷰 보기" />
+
+            <Button
+                android:id="@+id/bookinfo_writere"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="리뷰 작성" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/bookinfo_xxlin"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:text="리뷰 작성" />
+            android:gravity="center_horizontal">
 
-    </RelativeLayout>
+            <Button
+                android:id="@+id/bookinfo_purchase"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:text="구매" />
 
-    <RelativeLayout
-        android:id="@+id/bookinfo_xxlin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:layout_marginTop="30dp">
+            <Button
+                android:id="@+id/bookinfo_seereview"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/bookinfo_purchase"
+                android:layout_toLeftOf="@id/bookinfo_regist"
+                android:text="리뷰 보기" />
 
-        <Button
-            android:id="@+id/bookinfo_purchase"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:text="구매" />
+            <Button
+                android:id="@+id/bookinfo_regist"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="등록" />
 
-        <Button
-            android:id="@+id/bookinfo_seereview"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/bookinfo_purchase"
-            android:layout_toLeftOf="@id/bookinfo_regist"
-            android:text="리뷰 보기" />
+        </RelativeLayout>
 
-        <Button
-            android:id="@+id/bookinfo_regist"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:text="등록" />
+    </FrameLayout>
 
-    </RelativeLayout>
+
 
 
 </LinearLayout>
