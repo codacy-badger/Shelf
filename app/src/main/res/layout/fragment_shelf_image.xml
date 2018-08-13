@@ -6,8 +6,11 @@
     tools:context="chickenmumani.com.allshelf.Shelf_ImageFragment">
 
     <LinearLayout
+        android:id="@+id/shelffrag_linlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -21,8 +24,8 @@
                 android:layout_width="49dp"
                 android:layout_height="match_parent"
                 android:layout_alignParentLeft="true"
-                android:text="편집"
-                android:layout_gravity="center" />
+                android:layout_gravity="center"
+                android:text="편집" />
 
             <Spinner
                 android:id="@+id/desk_spinner"
@@ -44,9 +47,9 @@
                 android:id="@+id/desk_homebutton"
                 android:layout_width="49dp"
                 android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
-                android:layout_gravity="center"
-                android:layout_alignParentRight="true" />
+                android:layout_gravity="center" />
 
         </RelativeLayout>
 
@@ -67,25 +70,21 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
-                android:layout_toLeftOf="@+id/desk_searchbutton"/>
+                android:layout_toLeftOf="@+id/desk_searchbutton" />
 
         </RelativeLayout>
 
-        <ScrollView
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/book_shelfimagerecyclerview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <GridView
-                android:id="@+id/book_shelf"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:numColumns="3"
-                android:horizontalSpacing="8dp"
-                android:verticalSpacing="8dp"
-                android:layout_margin="8dp">
-            </GridView>
-
-        </ScrollView>
+            android:layout_height="match_parent"
+            android:name="com.tong.android.fragment.CollectionListFragment"
+            android:scrollbars="vertical"
+            android:numColumns="3"
+            android:gravity="center_horizontal"
+            tools:listitem="@layout/view_shelf_image"
+            android:layout_margin="8dp">
+        </android.support.v7.widget.RecyclerView>
 
     </LinearLayout>
 

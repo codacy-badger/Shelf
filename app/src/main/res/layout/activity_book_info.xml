@@ -6,6 +6,7 @@
     >
 
     <Button
+        android:id="@+id/bookinfo_close"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_margin="3dp"
@@ -15,6 +16,7 @@
         />
 
     <ImageView
+        android:id="@+id/bookinfo_img"
         android:layout_width="100dp"
         android:layout_height="140dp"
         android:layout_gravity="center_horizontal"
@@ -25,6 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
         android:layout_marginTop="20dp"
         android:orientation="horizontal">
         <TextView
@@ -42,6 +45,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
         android:layout_marginTop="10dp"
         android:orientation="horizontal">
         <TextView
@@ -59,23 +63,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:text="옮긴이"/>
-        <TextView
-            android:id="@+id/bookinfo_trans"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="-"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
         android:layout_marginTop="10dp"
         android:orientation="horizontal">
         <TextView
@@ -83,10 +71,28 @@
             android:layout_height="wrap_content"
             android:text="출판사"/>
         <TextView
+            android:id="@+id/bookinfo_company"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="부산대출판부"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:text="출간일"/>
+        <TextView
             android:id="@+id/bookinfo_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="부산대출판사"/>
+            android:text="2018-12-24"/>
     </LinearLayout>
 
     <LinearLayout
@@ -94,6 +100,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="10dp"
+        android:layout_marginRight="15dp"
         android:orientation="horizontal">
         <TextView
             android:layout_width="60dp"
@@ -111,6 +118,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="10dp"
+        android:layout_marginRight="15dp"
         android:orientation="horizontal">
         <TextView
             android:layout_width="60dp"
@@ -154,7 +162,7 @@
         android:layout_marginTop="30dp">
 
         <Button
-            android:id="@+id/bookinfo_perchase"
+            android:id="@+id/bookinfo_purchase"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -164,7 +172,7 @@
             android:id="@+id/bookinfo_seereview"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/bookinfo_perchase"
+            android:layout_toRightOf="@id/bookinfo_purchase"
             android:layout_toLeftOf="@id/bookinfo_regist"
             android:text="리뷰 보기" />
 

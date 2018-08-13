@@ -41,7 +41,6 @@ public class Notice_Fragment extends Fragment {
     public Notice_Fragment() {
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

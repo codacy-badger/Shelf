@@ -37,7 +37,6 @@ public class Navi_Activity extends AppCompatActivity
 
     private FirebaseAuth mAuth;
     Bitmap bitmap;
-    private ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +51,6 @@ public class Navi_Activity extends AppCompatActivity
 
         mAuth = FirebaseAuth.getInstance();
         final FirebaseUser user = mAuth.getCurrentUser();
-
-        dialog = ProgressDialog.show(Navi_Activity.this, "",
-                "Loading... Please wait");
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -74,12 +70,6 @@ public class Navi_Activity extends AppCompatActivity
         name.setText(user.getDisplayName().toString());
         email.setText(user.getEmail().toString());
 
-        final Handler handler = new Handler(){
-            @Override
-            public void handleMessage(Message msg) {
-                dialog.dismiss();
-            }
-        };
 
         Thread mThread = new Thread() {
             @Override
@@ -93,7 +83,6 @@ public class Navi_Activity extends AppCompatActivity
 
                     InputStream is = conn.getInputStream();
                     bitmap = BitmapFactory.decodeStream(is);
-                    handler.sendEmptyMessage(0);
                 } catch (Exception e) { e.printStackTrace(); }
             }
         };
@@ -107,7 +96,6 @@ public class Navi_Activity extends AppCompatActivity
             img.setBackground(new ShapeDrawable(new OvalShape()));
             img.setClipToOutline(true);
 
-            dialog.dismiss();
         } catch (Exception e) { e.printStackTrace(); }
 
         /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
