@@ -43,14 +43,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
-
+            <!--
                 <Button
                     android:id="@+id/mainButton1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="TEMPPPPPPPAP"/>
 
-                <!--
+
 
                 <Button
                     android:id="@+id/mainButton2"
@@ -91,7 +91,7 @@
                     android:layout_height="wrap_content"
                     android:text="messagepopactivity"/>
 
-                    !-->
+
 
                 <Button
                     android:id="@+id/mainButton8"
@@ -99,6 +99,7 @@
                     android:layout_height="wrap_content"
                     android:text="naviactivity"/>
 
+                !-->
 
             </LinearLayout>
 
