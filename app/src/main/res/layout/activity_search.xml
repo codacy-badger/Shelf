@@ -10,7 +10,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_marginTop="5dp"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <EditText
@@ -19,6 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:hint="도서명 또는 저자명"
+            android:maxLines="1"
             android:layout_toLeftOf="@id/search_button"/>
 
         <ImageButton

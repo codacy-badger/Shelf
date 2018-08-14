@@ -17,8 +17,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -62,8 +64,8 @@ public class BookInfo_Activity extends AppCompatActivity {
         Intent intent = getIntent();
         final String ISBN13 = intent.getExtras().getString("barcodeContents");
 
-        final RelativeLayout bookinfo_oolin = (RelativeLayout) findViewById(R.id.bookinfo_oolin);
-        final RelativeLayout bookinfo_xxlin = (RelativeLayout) findViewById(R.id.bookinfo_xxlin);
+        final LinearLayout bookinfo_oolin = (LinearLayout) findViewById(R.id.bookinfo_oolin);
+        final LinearLayout bookinfo_xxlin = (LinearLayout) findViewById(R.id.bookinfo_xxlin);
 
         mAuth = FirebaseAuth.getInstance();
         final FirebaseUser user = mAuth.getCurrentUser();
@@ -130,13 +132,25 @@ public class BookInfo_Activity extends AppCompatActivity {
                             try {
                                 mThread.join();
                                 img.setImageBitmap(bitmap);
-                            } catch (Exception e) { e.printStackTrace(); }
+                                vTitle.setText(bInfo.get(0));
+                                vAuthor.setText(bInfo.get(1));
+                                vPublisher.setText(bInfo.get(2));
+                                vPubDate.setText(bInfo.get(3));
+                                vISBN.setText(bInfo.get(4));
+                            } catch (Exception e) {
+                                /*
+                                AlertDialog.Builder builder = new AlertDialog.Builder(BookInfo_Activity.this);     // 여기서 this는 Activity의 this
+                                builder .setMessage("정보를 불러오는 중 문제가 발생했습니다. 다시 시도하세요.")
+                                        .setCancelable(false)
+                                        .setPositiveButton("닫기", null);
 
-                            vTitle.setText(bInfo.get(0));
-                            vAuthor.setText(bInfo.get(1));
-                            vPublisher.setText(bInfo.get(2));
-                            vPubDate.setText(bInfo.get(3));
-                            vISBN.setText(bInfo.get(4));
+                                AlertDialog dialog = builder.create();    // 알림창 객체 생성
+                                dialog.show();*/
+                                Toast.makeText(getApplicationContext(), "바코드 정보에 문제가 있습니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+
+                                finish();
+                                e.printStackTrace(); }
+
 
                             vAdd.setOnClickListener(new View.OnClickListener() {
                                 @Override
@@ -156,6 +170,17 @@ public class BookInfo_Activity extends AppCompatActivity {
                                     finish();
                                 }
                             });
+
+                            Button delete = (Button) findViewById(R.id.bookinfo_deletebook);
+                            delete.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    mDatabase = FirebaseDatabase.getInstance().getReference("User_Book")
+                                            .child(user.getUid());
+                                    mDatabase.child(bInfo.get(4)).removeValue();
+                                    finish();
+                                }
+                            });
                         }
                     });
                 }
@@ -168,6 +193,7 @@ public class BookInfo_Activity extends AppCompatActivity {
                     finish();
                 }
             });
+
         } catch(Exception e) {
             AlertDialog.Builder builder = new AlertDialog.Builder(BookInfo_Activity.this);     // 여기서 this는 Activity의 this
             builder .setMessage("정보를 불러오는 중 문제가 발생했습니다. 다시 시도하세요.")

@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -159,6 +160,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         dialog.dismiss();
+        Log.w(TAG, "start signin");
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
@@ -205,13 +207,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (requestCode == RC_SIGN_IN) {
             dialog = ProgressDialog.show(MainActivity.this, "",
                     "Loading... Please wait");
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
+                Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
+                Log.w(TAG,"intent data" + data.toString());
                 // Google Sign In failed, update UI appropriately
+                dialog.dismiss();
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);     // 여기서 this는 Activity의 this
+                builder .setMessage("정보를 불러오는 중 문제가 발생했습니다. 다시 시도하세요.")
+                        .setCancelable(false)
+                        .setPositiveButton("닫기", null);
+
+                AlertDialog dialog = builder.create();    // 알림창 객체 생성
+                dialog.show();
                 Log.w(TAG, "Google sign in failed", e);
                 updateUI(null);
             }

@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -19,11 +20,14 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -36,7 +40,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Map;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class Shelf_ImageFragment extends Fragment {
 
@@ -46,17 +54,21 @@ public class Shelf_ImageFragment extends Fragment {
     private DatabaseReference mDatabase;
     private FirebaseAuth mAuth;
 
+    private SharedPreferences appData;
     private Animation fab_open, fab_close;
     private Boolean isFabOpen = false;
     private FloatingActionButton fab, fab1, fab2;
     private TextView ftxt1, ftxt2;
+    private String sorte;
+    private Button sortb;
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        ProgressDialog dialog = ProgressDialog.show(getActivity(), "",
-                "Loading... Please wait");
-
         View view = inflater.inflate(R.layout.fragment_shelf_image,container,false);
+
+        sortb =  (Button) view.findViewById(R.id.desk_sortbuttoni);
+        appData = getActivity().getSharedPreferences("appData", MODE_PRIVATE);
+        load();
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.book_shelfimagerecyclerview);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
@@ -116,8 +128,19 @@ public class Shelf_ImageFragment extends Fragment {
             mRecyclerView.setLayoutManager(mLayoutManager);
 
             // specify an adapter (see also next example)
-            mAdapter = new Shelf_ImageAdapter(myList);
-            mRecyclerView.setAdapter(mAdapter);
+            if(sortb.getText() == "최신등록순") {
+                Collections.sort(myList,new Timing());
+                mAdapter = new Shelf_ImageAdapter(myList);
+                mRecyclerView.setAdapter(mAdapter);
+            } else if(sortb.getText() == "도서명순") {
+                Collections.sort(myList,new Titling());
+                mAdapter = new Shelf_ImageAdapter(myList);
+                mRecyclerView.setAdapter(mAdapter);
+            } else if(sortb.getText() == "저자명순") {
+                Collections.sort(myList,new Authoring());
+                mAdapter = new Shelf_ImageAdapter(myList);
+                mRecyclerView.setAdapter(mAdapter);
+            }
         }
 
         fab_open = AnimationUtils.loadAnimation(getActivity().getApplicationContext(), R.anim.fab_open);
@@ -169,7 +192,39 @@ public class Shelf_ImageFragment extends Fragment {
             }
         });
 
-        dialog.dismiss();
+        sortb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(sortb.getText() == "최신등록순") {
+                    Collections.sort(myList,new Titling());
+                    mAdapter = new Shelf_ImageAdapter(myList);
+                    mRecyclerView.setAdapter(mAdapter);
+                    sortb.setText("도서명순");
+                } else if(sortb.getText() == "도서명순") {
+                    Collections.sort(myList,new Authoring());
+                    mAdapter = new Shelf_ImageAdapter(myList);
+                    mRecyclerView.setAdapter(mAdapter);
+                    sortb.setText("저자명순");
+                } else if(sortb.getText() == "저자명순") {
+                    Collections.sort(myList,new Timing());
+                    mAdapter = new Shelf_ImageAdapter(myList);
+                    mRecyclerView.setAdapter(mAdapter);
+                    sortb.setText("최신등록순");
+                }
+
+            }
+        });
+
+        EditText edt = (EditText) view.findViewById(R.id.search_edittext);
+        edt.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    return true;
+                }
+                return false;
+            }
+        });
 
         return view;
     }
@@ -218,4 +273,39 @@ public class Shelf_ImageFragment extends Fragment {
             isFabOpen = true;
         }
     }
+
+    private void save() {
+        SharedPreferences.Editor editor = appData.edit();
+        editor.putString("sorted", sortb.getText().toString().trim());
+        editor.apply();
+    }
+
+    private void load() {
+        sorte = appData.getString("sorted", "최신등록순");
+        sortb.setText(sorte);
+    }
+}
+
+class Timing implements Comparator<Shelf_Item> {
+    @Override
+    public int compare(Shelf_Item o1, Shelf_Item o2) {
+        return o2.getTime().compareTo(o1.getTime());
+    }
+
+}
+
+class Titling implements Comparator<Shelf_Item> {
+    @Override
+    public int compare(Shelf_Item o1, Shelf_Item o2) {
+        return o1.getTitle().compareTo(o2.getTitle());
+    }
+
+}
+
+class Authoring implements Comparator<Shelf_Item> {
+    @Override
+    public int compare(Shelf_Item o1, Shelf_Item o2) {
+        return o1.getAuthor().compareTo(o2.getAuthor());
+    }
+
 }

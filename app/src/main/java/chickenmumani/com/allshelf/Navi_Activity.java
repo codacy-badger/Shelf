@@ -2,6 +2,7 @@ package chickenmumani.com.allshelf;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.ShapeDrawable;
@@ -21,6 +22,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -109,6 +111,8 @@ public class Navi_Activity extends AppCompatActivity
                         .setAction("Action", null).show();
             }
         });*/
+
+
     }
 
     @Override
@@ -189,5 +193,7 @@ public class Navi_Activity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
 }
 

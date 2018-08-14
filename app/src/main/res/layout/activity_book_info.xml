@@ -118,57 +118,77 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp">
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/bookinfo_oolin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:gravity="center_horizontal">
 
             <Button
                 android:id="@+id/bookinfo_lookre"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
+                android:layout_weight="1"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp"
                 android:text="리뷰 보기" />
 
             <Button
                 android:id="@+id/bookinfo_writere"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
+                android:layout_weight="1"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp"
                 android:text="리뷰 작성" />
 
-        </RelativeLayout>
+            <Button
+                android:id="@+id/bookinfo_deletebook"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp"
+                android:text="삭제" />
 
-        <RelativeLayout
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/bookinfo_xxlin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:gravity="center_horizontal">
 
             <Button
                 android:id="@+id/bookinfo_purchase"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
+                android:layout_weight="1"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp"
                 android:text="구매" />
 
             <Button
                 android:id="@+id/bookinfo_seereview"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/bookinfo_purchase"
-                android:layout_toLeftOf="@id/bookinfo_regist"
+                android:layout_weight="1"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp"
                 android:text="리뷰 보기" />
 
             <Button
                 android:id="@+id/bookinfo_regist"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
+                android:layout_weight="1"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp"
                 android:text="등록" />
 
-        </RelativeLayout>
+        </LinearLayout>
 
     </FrameLayout>
 
