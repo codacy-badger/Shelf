@@ -215,17 +215,6 @@ public class Shelf_ImageFragment extends Fragment {
             }
         });
 
-        EditText edt = (EditText) view.findViewById(R.id.search_edittext);
-        edt.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                    return true;
-                }
-                return false;
-            }
-        });
-
         return view;
     }
 
