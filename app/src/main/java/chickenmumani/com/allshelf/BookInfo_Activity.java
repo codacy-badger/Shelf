@@ -55,6 +55,7 @@ public class BookInfo_Activity extends AppCompatActivity {
     Bitmap bitmap;
     private DatabaseReference mDatabase;
     private FirebaseAuth mAuth;
+    String isbn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,6 +138,8 @@ public class BookInfo_Activity extends AppCompatActivity {
                                 vPublisher.setText(bInfo.get(2));
                                 vPubDate.setText(bInfo.get(3));
                                 vISBN.setText(bInfo.get(4));
+
+                                isbn = bInfo.get(4);
                             } catch (Exception e) {
                                 /*
                                 AlertDialog.Builder builder = new AlertDialog.Builder(BookInfo_Activity.this);     // 여기서 this는 Activity의 this
@@ -203,6 +206,18 @@ public class BookInfo_Activity extends AppCompatActivity {
             AlertDialog dialog = builder.create();    // 알림창 객체 생성
             dialog.show();    // 알림창 띄우기
         }
+
+        Button writer = (Button) findViewById(R.id.bookinfo_writere);
+        writer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(BookInfo_Activity.this, Review_WriteActivity.class);
+                intent.putExtra("uid",user.getUid());
+                intent.putExtra("isbn",isbn);
+                startActivity(intent);
+                finish();
+            }
+        });
 
 
     }

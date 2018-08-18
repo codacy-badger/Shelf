@@ -40,6 +40,14 @@
         <item>-1</item>
     </string-array>
 
+    <string name="wredithint">"여기에 리뷰를 작성해주세요! (10자 이상)
+사진 1장을 업로드하셔야 글 작성이 완료됩니다.
+
+[다음과 같은 글을 업로드할 시 무통보 삭제될 수 있습니다.]
+  - 욕설, 비하, 음란물, 개인정보가 포함된 게시물
+  - 지역, 성별 등 갈등을 조장하는 게시물
+  - 홍보 게시물"</string>
+
     <!-- Example settings for Data & Sync -->
     <string name="pref_header_data_sync">Data &amp; sync</string>
 

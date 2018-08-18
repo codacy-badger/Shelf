@@ -61,6 +61,7 @@ public class Shelf_ImageFragment extends Fragment {
     private TextView ftxt1, ftxt2;
     private String sorte;
     private Button sortb;
+    private String it;
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
@@ -72,8 +73,10 @@ public class Shelf_ImageFragment extends Fragment {
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.book_shelfimagerecyclerview);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
-        mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
         mRecyclerView.setHasFixedSize(true);
+
+        if(it == "i") mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
+        else mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
 
         final ArrayList<Shelf_Item> myList = new ArrayList<Shelf_Item>();
 
@@ -103,7 +106,7 @@ public class Shelf_ImageFragment extends Fragment {
                 }
 
                 if(check == 1) {
-                    mAdapter = new Shelf_ImageAdapter(myList);
+                    mAdapter = new Shelf_ImageAdapter(myList, it);
                     mRecyclerView.setAdapter(mAdapter);
                 }
 
@@ -129,16 +132,16 @@ public class Shelf_ImageFragment extends Fragment {
 
             // specify an adapter (see also next example)
             if(sortb.getText() == "최신등록순") {
-                Collections.sort(myList,new Timing());
-                mAdapter = new Shelf_ImageAdapter(myList);
+                Collections.sort(myList,new TimingS());
+                mAdapter = new Shelf_ImageAdapter(myList, it);
                 mRecyclerView.setAdapter(mAdapter);
             } else if(sortb.getText() == "도서명순") {
-                Collections.sort(myList,new Titling());
-                mAdapter = new Shelf_ImageAdapter(myList);
+                Collections.sort(myList,new TitlingS());
+                mAdapter = new Shelf_ImageAdapter(myList, it);
                 mRecyclerView.setAdapter(mAdapter);
             } else if(sortb.getText() == "저자명순") {
-                Collections.sort(myList,new Authoring());
-                mAdapter = new Shelf_ImageAdapter(myList);
+                Collections.sort(myList,new AuthoringS());
+                mAdapter = new Shelf_ImageAdapter(myList, it);
                 mRecyclerView.setAdapter(mAdapter);
             }
         }
@@ -196,22 +199,40 @@ public class Shelf_ImageFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if(sortb.getText() == "최신등록순") {
-                    Collections.sort(myList,new Titling());
-                    mAdapter = new Shelf_ImageAdapter(myList);
+                    Collections.sort(myList,new TitlingS());
+                    mAdapter = new Shelf_ImageAdapter(myList, it);
                     mRecyclerView.setAdapter(mAdapter);
                     sortb.setText("도서명순");
                 } else if(sortb.getText() == "도서명순") {
-                    Collections.sort(myList,new Authoring());
-                    mAdapter = new Shelf_ImageAdapter(myList);
+                    Collections.sort(myList,new AuthoringS());
+                    mAdapter = new Shelf_ImageAdapter(myList, it);
                     mRecyclerView.setAdapter(mAdapter);
                     sortb.setText("저자명순");
                 } else if(sortb.getText() == "저자명순") {
-                    Collections.sort(myList,new Timing());
-                    mAdapter = new Shelf_ImageAdapter(myList);
+                    Collections.sort(myList,new TimingS());
+                    mAdapter = new Shelf_ImageAdapter(myList, it);
                     mRecyclerView.setAdapter(mAdapter);
                     sortb.setText("최신등록순");
                 }
 
+            }
+        });
+
+        Button menub = (Button) view.findViewById(R.id.desk_menubutton);
+        menub.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(it.equals("i")) {
+                    mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
+                    it = "t";
+                    mAdapter = new Shelf_ImageAdapter(myList, it);
+                    mRecyclerView.setAdapter(mAdapter);
+                } else {
+                    mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
+                    it = "i";
+                    mAdapter = new Shelf_ImageAdapter(myList, it);
+                    mRecyclerView.setAdapter(mAdapter);
+                }
             }
         });
 
@@ -266,16 +287,18 @@ public class Shelf_ImageFragment extends Fragment {
     private void save() {
         SharedPreferences.Editor editor = appData.edit();
         editor.putString("sorted", sortb.getText().toString().trim());
+        editor.putString("it",it);
         editor.apply();
     }
 
     private void load() {
         sorte = appData.getString("sorted", "최신등록순");
         sortb.setText(sorte);
+        it = appData.getString("it","i");
     }
 }
 
-class Timing implements Comparator<Shelf_Item> {
+class TimingS implements Comparator<Shelf_Item> {
     @Override
     public int compare(Shelf_Item o1, Shelf_Item o2) {
         return o2.getTime().compareTo(o1.getTime());
@@ -283,7 +306,7 @@ class Timing implements Comparator<Shelf_Item> {
 
 }
 
-class Titling implements Comparator<Shelf_Item> {
+class TitlingS implements Comparator<Shelf_Item> {
     @Override
     public int compare(Shelf_Item o1, Shelf_Item o2) {
         return o1.getTitle().compareTo(o2.getTitle());
@@ -291,7 +314,7 @@ class Titling implements Comparator<Shelf_Item> {
 
 }
 
-class Authoring implements Comparator<Shelf_Item> {
+class AuthoringS implements Comparator<Shelf_Item> {
     @Override
     public int compare(Shelf_Item o1, Shelf_Item o2) {
         return o1.getAuthor().compareTo(o2.getAuthor());

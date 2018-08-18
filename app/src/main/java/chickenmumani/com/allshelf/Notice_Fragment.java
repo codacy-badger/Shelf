@@ -26,6 +26,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Map;
 
 public class Notice_Fragment extends Fragment {
@@ -74,7 +76,7 @@ public class Notice_Fragment extends Fragment {
                     Map<String,Object> map = (Map<String,Object>) ds.getValue();
                     myList.add(new Notice_Item(map.get("id").toString(), map.get("title").toString(), map.get("date").toString())) ;
                 }
-
+                Collections.sort(myList,new TimingN());
                 mAdapter = new Notice_Adapter(myList);
                 mRecyclerView.setAdapter(mAdapter);
                 //circle_bar.setVisibility(View.INVISIBLE);
@@ -120,68 +122,10 @@ public class Notice_Fragment extends Fragment {
 
 }
 
-
-    /*
-
-    Notice_Adapter adapter;
-    private DatabaseReference mDatabase;
-
+class TimingN implements Comparator<Notice_Item> {
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        // Adapter 생성 및 Adapter 지정.
-        adapter = new Notice_Adapter() ;
-        setListAdapter(adapter) ; // 첫 번째 아이템 추가
-
-        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference databaseReference = firebaseDatabase.getReference();
-        mDatabase = FirebaseDatabase.getInstance().getReference("Notice_Item");
-
-        mDatabase.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot ds : dataSnapshot.getChildren()) {
-                    Map<String,Object> map = (Map<String,Object>) ds.getValue();
-                    adapter.addItem(map.get("id").toString(), map.get("title").toString(), map.get("date").toString()) ;
-                    setListAdapter(adapter) ;
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-        return super.onCreateView(inflater, container, savedInstanceState);
-
+    public int compare(Notice_Item o1, Notice_Item o2) {
+        return o2.getDate().compareTo(o1.getDate());
     }
 
-    public void onResume(){
-        super.onResume();
-        ((Navi_Activity) getActivity())
-                .setActionBarTitle("공지사항");
-
-    }
-
-    @Override
-    public void onListItemClick (ListView l, View v, int position, long id) {
-        // get TextView's Text.
-        Notice_Item item = (Notice_Item)l.getItemAtPosition(position);
-        String strText = item.getTitle();
-        //Toast.makeText(getActivity(), strText, Toast.LENGTH_LONG).show();
-
-        Intent intent = new Intent(getActivity(),Notice_ContentActivity.class);
-        intent.putExtra("id",item.getId());
-        intent.putExtra("title",item.getTitle());
-        intent.putExtra("date",item.getDate());
-        startActivity(intent);
-    }
-
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-    }
 }
-*/

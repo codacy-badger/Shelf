@@ -26,16 +26,23 @@ public class Shelf_ImageAdapter extends RecyclerView.Adapter<Shelf_ImageAdapter.
 
     private List<Shelf_Item> myList;
     Bitmap bitmap;
+    String it;
 
-    public Shelf_ImageAdapter(List<Shelf_Item> list) {
+    public Shelf_ImageAdapter(List<Shelf_Item> list, String it) {
         this.myList = list;
+        this.it = it;
     }
 
     @Override
 
     public Shelf_ImageAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext())
+        View v;
+        if(it.equals("i"))
+            v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.view_shelf_image, parent, false);
+        else
+            v = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.view_shelf_text, parent, false);
         return new Shelf_ImageAdapter.ViewHolder(v);
     }
 
@@ -68,6 +75,13 @@ public class Shelf_ImageAdapter extends RecyclerView.Adapter<Shelf_ImageAdapter.
             img.setImageBitmap(bitmap);
         } catch (Exception e) { e.printStackTrace(); }
 
+        if(it.equals("t")) {
+            holder.notit.setText(my.getTitle());
+            holder.noaut.setText(my.getAuthor());
+            holder.noisbn.setText(my.getIsbn());
+
+        }
+
         holder.nolay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
@@ -86,16 +100,27 @@ public class Shelf_ImageAdapter extends RecyclerView.Adapter<Shelf_ImageAdapter.
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public final View mView;
-        public final ImageView noimg;
-        public final LinearLayout nolay;
-
+        public View mView;
+        public ImageView noimg;
+        public LinearLayout nolay;
+        public TextView notit;
+        public TextView noaut;
+        public TextView noisbn;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            noimg = (ImageView) view.findViewById(R.id.shelfview_img);
-            nolay = (LinearLayout) view.findViewById(R.id.shelfview_ilay);
+            if(it == "i") {
+                noimg = (ImageView) view.findViewById(R.id.shelfview_img);
+                nolay = (LinearLayout) view.findViewById(R.id.shelfview_ilay);
+            } else {
+                noimg = (ImageView) view.findViewById(R.id.shelfview_timg);
+                nolay = (LinearLayout) view.findViewById(R.id.shelfview_tlay);
+                notit = (TextView) view.findViewById(R.id.shelfview_ttitle);
+                noaut = (TextView) view.findViewById(R.id.shelfview_tauthor);
+                noisbn = (TextView) view.findViewById(R.id.shelfview_tisbn);
+            }
+
 
         }
 

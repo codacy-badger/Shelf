@@ -26,7 +26,6 @@ public class Notice_Adapter extends RecyclerView.Adapter<Notice_Adapter.ViewHold
     }
 
     @Override
-
     public Notice_Adapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.view_notice, parent, false);
