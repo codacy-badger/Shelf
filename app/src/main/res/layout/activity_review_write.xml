@@ -76,10 +76,16 @@
 
             <RatingBar
                 android:id="@+id/review_ratingbar"
-                style="@android:style/Widget.Material.Light.RatingBar.Indicator"
+                style="@style/Widget.AppCompat.RatingBar.Indicator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal" />
+                android:layout_gravity="center_horizontal"
+                android:numStars="5"
+                android:rating="5"
+                android:stepSize="1"
+                android:max="5"
+                android:min="0"
+                android:isIndicator="false" />
 
 
             <View
@@ -92,7 +98,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
-
                 android:layout_marginLeft="15dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
@@ -106,6 +111,7 @@
                     android:id="@+id/writere_radopen"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:checkedButton="@+id/writere_radopenall"
                     android:orientation="horizontal">
 
                     <RadioButton
@@ -139,6 +145,7 @@
                     android:id="@+id/writere_radcom"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:checkedButton="@+id/writere_radcomyes"
                     android:orientation="horizontal">
 
                     <RadioButton

@@ -21,33 +21,43 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioGroup;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 
 import chickenmumani.com.allshelf.R;
 
 public class Review_WriteActivity extends AppCompatActivity {
 
     private DatabaseReference mDatabase;
-    String isbn;
-    String uid;
+    String isbn, uid, uname, proimg;
     final int RESULT_LOAD_IMG = 5;
     final int CROP_FROM_CAMERA = 6;
     FirebaseStorage storage;
     StorageReference storageRef;
+    RatingBar ratingbar;
     Uri selectedImage;
     Bitmap photo;
+    int reviewcount, cancomment = 1, openrange = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,9 +68,12 @@ public class Review_WriteActivity extends AppCompatActivity {
         Intent intent = getIntent();
         isbn = intent.getStringExtra("isbn");
         uid = intent.getStringExtra("uid");
-        mDatabase = FirebaseDatabase.getInstance().getReference("Review");
+        uname = intent.getStringExtra("uname");
+        proimg = intent.getStringExtra("cover");
+        mDatabase = FirebaseDatabase.getInstance().getReference();
         storage = FirebaseStorage.getInstance();
         storageRef = storage.getReference();
+        ratingbar =(RatingBar)findViewById(R.id.review_ratingbar);
 
         Button imgbut = (Button) findViewById(R.id.writere_editbutton);
         imgbut.setOnClickListener(new View.OnClickListener() {
@@ -69,6 +82,36 @@ public class Review_WriteActivity extends AppCompatActivity {
                 Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
                 photoPickerIntent.setType("image/*");
                 startActivityForResult(photoPickerIntent, RESULT_LOAD_IMG);
+            }
+        });
+
+        RadioGroup group1=(RadioGroup)findViewById(R.id.writere_radopen);
+        group1.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                switch (i){
+                    case R.id.writere_radopenall:
+                        cancomment = 1;
+                        break;
+                    case R.id.writere_radopenno:
+                        cancomment = 0;
+                        break;
+                }
+            }
+        });
+
+        RadioGroup group2=(RadioGroup)findViewById(R.id.writere_radcom);
+        group1.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                switch (i){
+                    case R.id.writere_radcomyes:
+                        openrange = 1;
+                        break;
+                    case R.id.writere_radcomno:
+                        openrange = 0;
+                        break;
+                }
             }
         });
 
@@ -90,19 +133,29 @@ public class Review_WriteActivity extends AppCompatActivity {
                     AlertDialog dialog = builder.create();
                     dialog.show();
                     return true;
+                } else if(((TextView)findViewById(R.id.writere_title)).getText().toString().equals("사진을 추가해주세요")) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder .setMessage("리뷰에 사용할 사진을 업로드해주세요.")
+                            .setCancelable(false)
+                            .setPositiveButton("확인", null);
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                    return true;
                 }
+
+                final ProgressDialog dialogr = ProgressDialog.show(Review_WriteActivity.this, "",
+                        "Loading... Please wait");
 
                 StorageReference ImagesRef = storageRef.child("Review_Image/"+isbn +"_"+ uid +".jpg");
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 photo.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                 byte[] data = baos.toByteArray();
                 UploadTask uploadTask = ImagesRef.putBytes(data);
-                final ProgressDialog dialog = ProgressDialog.show(Review_WriteActivity.this, "",
-                        "Loading... Please wait");
+
                 uploadTask.addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception exception) {
-                        dialog.dismiss();
+                        dialogr.dismiss();
                         AlertDialog.Builder builder = new AlertDialog.Builder(Review_WriteActivity.this);
                         builder .setMessage("이미지 업로드에 실패했습니다. 네트워크 연결을 확인해주세요.")
                                 .setCancelable(false)
@@ -114,11 +167,52 @@ public class Review_WriteActivity extends AppCompatActivity {
                 }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        dialog.dismiss();
-                        Review_WriteActivity.this.finish();
+
+                        mDatabase.child("Review").child("ReviewList").child("Counter").
+                                child("GetCount").runTransaction(new Transaction.Handler() {
+                            @Override
+                            public Transaction.Result doTransaction(MutableData mutableData) {
+                                if (mutableData.getValue() == null) {
+                                    return Transaction.success(mutableData);
+                                }
+                                reviewcount = (int)(long)mutableData.getValue();
+                                reviewcount++;
+                                mutableData.setValue(reviewcount);
+                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+                                Date date = new Date(System.currentTimeMillis());
+                                String getTime = sdf.format(date);
+                                DatabaseReference tdata = mDatabase.child("Review").child("ReviewList").child(String.valueOf(reviewcount));
+                                tdata.child("Blinded").setValue(0);
+                                tdata.child("Comment").child("CanComment").setValue(cancomment);
+                                tdata.child("Good").child("Count").setValue(0);
+                                tdata.child("ISBN").setValue(isbn);
+                                tdata.child("Image").setValue("Review_Image/"+isbn +"_"+ uid +".jpg");
+                                tdata.child("OpenRange").setValue(openrange);
+                                tdata.child("Rate").setValue(ratingbar.getNumStars());
+                                tdata.child("Text").setValue(((EditText)findViewById(R.id.wredit)).getText().toString());
+                                tdata.child("UserInfo").child("name").setValue(uname);
+                                tdata.child("UserInfo").child("uid").setValue(uid);
+                                tdata.child("UserInfo").child("proimg").setValue(proimg);
+                                Log.d("w","proimg : " + proimg);
+                                tdata.child("Time").setValue(getTime);
+
+                                mDatabase.child("Review").child("Book").child(isbn).child(uid).setValue(reviewcount);
+                                mDatabase.child("Review").child("User").child(uid).child(isbn).setValue(reviewcount);
+
+                                dialogr.dismiss();
+                                Review_WriteActivity.this.finish();
+
+                                return Transaction.success(mutableData);
+                            }
+
+                            @Override
+                            public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
+                                Log.d("w", "postTransaction:onComplete:" + databaseError);
+                            }
+                        });
+
                     }
                 });
-
                 return true;
             }
             default:
