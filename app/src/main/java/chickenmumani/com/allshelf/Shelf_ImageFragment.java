@@ -236,6 +236,15 @@ public class Shelf_ImageFragment extends Fragment {
             }
         });
 
+        Button timel = (Button) view.findViewById(R.id.desk_timelinebutton);
+        menub.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), Shelf_TimelineActivity.class);
+                startActivity(intent);
+            }
+        });
+
         return view;
     }
 

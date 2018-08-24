@@ -4,6 +4,7 @@ import android.graphics.drawable.Drawable;
 
 public class Post_Item {
 
+    private String uid;
     private Drawable profile;
     private String uname;
     private int star;
@@ -13,7 +14,8 @@ public class Post_Item {
     private Drawable postimg;
     private String posttext;
 
-    public Post_Item(Drawable profile, String uname, int star, String date, boolean isfav, int favcount, Drawable postimg, String posttext) {
+    public Post_Item(String uid, Drawable profile, String uname, int star, String date, boolean isfav, int favcount, Drawable postimg, String posttext) {
+        this.uid = uid;
         this.profile = profile;
         this.uname = uname;
         this.star = star;
@@ -22,6 +24,14 @@ public class Post_Item {
         this.favcount = favcount;
         this.postimg = postimg;
         this.posttext = posttext;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public Drawable getProfile() {

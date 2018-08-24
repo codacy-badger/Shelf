@@ -55,7 +55,8 @@
         <activity
             android:name=".Shelf_BarcodeScanActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".Shelf_TimelineActivity"></activity>
+        <activity android:name=".Shelf_TimelineActivity" />
+        <activity android:name=".Shelf_ReviewlistActivity"></activity>
     </application>
 
 </manifest>
