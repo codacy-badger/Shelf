@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -57,7 +58,6 @@ public class Shelf_TimelineActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 final String urls = (String)dataSnapshot.getValue();
-                System.out.println(urls);
                 Thread mThread = new Thread() {
                     @Override
                     public void run() {
@@ -69,10 +69,16 @@ public class Shelf_TimelineActivity extends AppCompatActivity {
                             conn.connect();
 
                             InputStream is = conn.getInputStream();
-                            Bitmap apro = BitmapFactory.decodeStream(is);
-
+                            final Bitmap apro = BitmapFactory.decodeStream(is);
+                            runOnUiThread(new Runnable(){
+                                @Override
+                                public void run() {
+                                    proimg.setImageBitmap(apro);
+                                    proimg.setBackground(new ShapeDrawable(new OvalShape()));
+                                    proimg.setClipToOutline(true);
+                                }
+                            });
                         } catch (Exception e) { e.printStackTrace(); }
-
                     }
                 };
                 mThread.start();
@@ -93,21 +99,26 @@ public class Shelf_TimelineActivity extends AppCompatActivity {
         mRecyclerView.setHasFixedSize(true);
 
         final ArrayList<Post_Item> myList = new ArrayList<Post_Item>();
-        final ArrayList<Integer> myListI = new ArrayList<Integer>();
 
         mDatabase = FirebaseDatabase.getInstance().getReference("Review")
                 .child("User").child(uid);
-        postListener = new ValueEventListener() {
+
+        Log.d("w","review loading started");
+        ValueEventListener postListener3 = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                myListI.clear();
+                Log.d("w","data changing");
+                Log.d("w", dataSnapshot.toString());
+                myList.clear();
                 for(DataSnapshot ds : dataSnapshot.getChildren()) {
                     try {
+                        Log.d("w", ds.toString());
                         DatabaseReference mDatabase2 = FirebaseDatabase.getInstance().getReference("Review")
                                 .child("ReviewList").child((String)ds.getValue());
                         ValueEventListener postListener2 = new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
+                                Log.d("w", dataSnapshot.toString());
                                 Map<String,Object> map = (Map<String,Object>) dataSnapshot.getValue();
                                 Map<String,Object> mapUser = (Map<String,Object>) map.get("UserInfo");
                                 Map<String,Object> mapFav = (Map<String,Object>) map.get("Good");
@@ -127,15 +138,14 @@ public class Shelf_TimelineActivity extends AppCompatActivity {
                     } catch(Exception e) {
                     }
                 }
+                Shelf_TimelineActivity.get();
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
             }
         };
-        mDatabase.addValueEventListener(postListener);
-
-
-
+        mDatabase.addValueEventListener(postListener3);
+        Log.d("w","review loading started2222");
 
         mAdapter = new Post_Adapter(myList, uid, uname, upro);
         mRecyclerView.setAdapter(mAdapter);
