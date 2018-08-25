@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -25,11 +36,16 @@ import static java.lang.Boolean.TRUE;
 public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.ViewHolder> {
 
     private List<Post_Item> myList;
-    Bitmap bitmap1, bitmap2, upro;
+    Bitmap bitmap;
+    Drawable upro;
     boolean is_uid_isbn;
     String uid, uname, isbn;
+    FirebaseStorage storage;
+    StorageReference storageRef;
+    private DatabaseReference mDatabase;
+    public View mView;
 
-    public Post_Adapter(List<Post_Item> list, String uid, String uname, Bitmap upro) {
+    public Post_Adapter(List<Post_Item> list, String uid, String uname, Drawable upro) {
         this.myList = list;
         this.uid = uid;
         this.uname = uname;
@@ -57,47 +73,51 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.ViewHolder> 
         final Post_Item my = myList.get(position);
         ImageView popro = holder.popro;
         ImageView poimg = holder.poimg;
+        storage = FirebaseStorage.getInstance();
+        storageRef = storage.getReference();
 
-        Thread mThread = new Thread() {
-            @Override
-            public void run() {
-                try {
-                    URL url = new URL(my.getPostimg());
+        Glide.with(mView)
+                .load(storageRef.child(my.getPostimg()))
+                .into(poimg);
 
-                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                    conn.setDoInput(true);
-                    conn.connect();
+        if(is_uid_isbn) {
+            Thread mThread = new Thread() {
+                @Override
+                public void run() {
+                    mDatabase = FirebaseDatabase.getInstance().getReference("User_Info")
+                            .child(my.getUid()).child("Profile_URL");
+                    ValueEventListener postListener = new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            String urls = (String)dataSnapshot.getValue();
+                            try {
+                                URL url = new URL(urls);
 
-                    InputStream is = conn.getInputStream();
-                    bitmap1 = BitmapFactory.decodeStream(is);
+                                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                                conn.setDoInput(true);
+                                conn.connect();
 
-                    if(is_uid_isbn) {
-                        url = new URL(my.getProfile());
+                                InputStream is = conn.getInputStream();
+                                bitmap = BitmapFactory.decodeStream(is);
+                            } catch (Exception e) { e.printStackTrace(); }
+                        }
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                        }
+                    };
+                    mDatabase.addListenerForSingleValueEvent(postListener);
+                }
+            };
 
-                        conn = (HttpURLConnection) url.openConnection();
-                        conn.setDoInput(true);
-                        conn.connect();
+            mThread.start();
 
-                        is = conn.getInputStream();
-                        bitmap2 = BitmapFactory.decodeStream(is);
-                    }
-
-
-                } catch (Exception e) { e.printStackTrace(); }
-            }
-        };
-
-        mThread.start();
-
-        try {
-            mThread.join();
-            poimg.setImageBitmap(bitmap1);
-            if(is_uid_isbn) {
-                popro.setImageBitmap(bitmap2);
-            } else {
-                popro.setImageBitmap(upro);
-            }
-        } catch (Exception e) { e.printStackTrace(); }
+            try {
+                mThread.join();
+                popro.setImageBitmap(bitmap);
+            } catch (Exception e) { e.printStackTrace(); }
+        } else {
+            popro.setImageDrawable(upro);
+        }
 
         if(my.getIsfav()) holder.poisfav.setImageResource(R.drawable.ic_favorite_orange_24dp);
         else holder.poisfav.setImageResource(R.drawable.ic_favorite_gray_24dp);
@@ -128,7 +148,6 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.ViewHolder> 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public View mView;
         public ImageView popro;
         public TextView poname;
         public RatingBar poratingbar;
@@ -149,10 +168,6 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.ViewHolder> 
             poisfav = (ImageView) view.findViewById(R.id.post_isfav);
             poimg = (ImageView) view.findViewById(R.id.post_revimg);
             porevtext = (TextView) view.findViewById(R.id.post_revtext);
-
-            }
-
-
         }
 
     }

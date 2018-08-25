@@ -242,6 +242,8 @@ public class Shelf_ImageFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), Shelf_TimelineActivity.class);
+                intent.putExtra("uid", user.getUid());
+                intent.putExtra("uname", user.getDisplayName());
                 startActivity(intent);
             }
         });

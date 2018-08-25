@@ -199,6 +199,8 @@ public class Review_WriteActivity extends AppCompatActivity {
                                 mDatabase.child("Review").child("Book").child(isbn).child(uid).setValue(reviewcount);
                                 mDatabase.child("Review").child("User").child(uid).child(isbn).setValue(reviewcount);
 
+                                mDatabase.child("User_Info").child(uid).child("Profile_Image").setValue(proimg);
+
                                 dialogr.dismiss();
                                 Review_WriteActivity.this.finish();
 

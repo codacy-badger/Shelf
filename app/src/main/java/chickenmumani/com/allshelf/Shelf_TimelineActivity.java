@@ -1,10 +1,40 @@
 package chickenmumani.com.allshelf;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.OvalShape;
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Map;
+
+import static java.lang.Boolean.FALSE;
 
 public class Shelf_TimelineActivity extends AppCompatActivity {
+
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -12,6 +42,104 @@ public class Shelf_TimelineActivity extends AppCompatActivity {
         setContentView(R.layout.activity_shelf_timeline);
         setTitle("리뷰");
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        Intent intent = getIntent();
+        final String uid = intent.getStringExtra("uid");
+        String uname = intent.getStringExtra("uname");
+        Drawable upro;
+        final ImageView proimg = (ImageView) findViewById(R.id.timeline_img);
+        TextView nameT = (TextView) findViewById(R.id.timeline_name);
+        nameT.setText(uname);
+
+        mDatabase = FirebaseDatabase.getInstance().getReference("User_Info")
+                .child(uid).child("Profile_Image");
+        ValueEventListener postListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                final String urls = (String)dataSnapshot.getValue();
+                System.out.println(urls);
+                Thread mThread = new Thread() {
+                    @Override
+                    public void run() {
+                        try {
+                            URL url = new URL(urls);
+
+                            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                            conn.setDoInput(true);
+                            conn.connect();
+
+                            InputStream is = conn.getInputStream();
+                            Bitmap apro = BitmapFactory.decodeStream(is);
+
+                        } catch (Exception e) { e.printStackTrace(); }
+
+                    }
+                };
+                mThread.start();
+
+                try {
+                    mThread.join();
+                } catch (Exception e) { e.printStackTrace(); }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        };
+        mDatabase.addValueEventListener(postListener);
+        upro = proimg.getDrawable();
+
+        mRecyclerView = (RecyclerView) findViewById(R.id.timeline_recyclerview);
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(Shelf_TimelineActivity.this, DividerItemDecoration.VERTICAL));
+        mRecyclerView.setHasFixedSize(true);
+
+        final ArrayList<Post_Item> myList = new ArrayList<Post_Item>();
+        final ArrayList<Integer> myListI = new ArrayList<Integer>();
+
+        mDatabase = FirebaseDatabase.getInstance().getReference("Review")
+                .child("User").child(uid);
+        postListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                myListI.clear();
+                for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                    try {
+                        DatabaseReference mDatabase2 = FirebaseDatabase.getInstance().getReference("Review")
+                                .child("ReviewList").child((String)ds.getValue());
+                        ValueEventListener postListener2 = new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                Map<String,Object> map = (Map<String,Object>) dataSnapshot.getValue();
+                                Map<String,Object> mapUser = (Map<String,Object>) map.get("UserInfo");
+                                Map<String,Object> mapFav = (Map<String,Object>) map.get("Good");
+                                myList.add(new Post_Item(mapUser.get("uid").toString(), mapUser.get("proimg").toString(),
+                                        mapUser.get("name").toString(), Integer.parseInt(map.get("Rate").toString()),
+                                        map.get("Time").toString(), FALSE, Integer.parseInt(mapFav.get("Good").toString()),
+                                        map.get("Image").toString(), map.get("Text").toString()
+                                        ));
+                            }
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                            }
+                        };
+                        mDatabase2.addValueEventListener(postListener2);
+
+
+                    } catch(Exception e) {
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        };
+        mDatabase.addValueEventListener(postListener);
+
+
+
+
+        mAdapter = new Post_Adapter(myList, uid, uname, upro);
+        mRecyclerView.setAdapter(mAdapter);
+
     }
 
     @Override
