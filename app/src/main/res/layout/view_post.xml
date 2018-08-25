@@ -99,6 +99,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
+        android:layout_marginTop="15dp"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_camera_alt_black_24dp"/>
 

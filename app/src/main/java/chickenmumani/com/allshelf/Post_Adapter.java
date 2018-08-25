@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -71,14 +74,30 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.ViewHolder> 
     @Override
     public void onBindViewHolder(final Post_Adapter.ViewHolder holder, int position) {
         final Post_Item my = myList.get(position);
-        ImageView popro = holder.popro;
-        ImageView poimg = holder.poimg;
+        final ImageView popro = holder.popro;
+        final ImageView poimg = holder.poimg;
         storage = FirebaseStorage.getInstance();
         storageRef = storage.getReference();
 
+
+/*
         Glide.with(mView)
                 .load(storageRef.child(my.getPostimg()))
                 .into(poimg);
+*/
+        StorageReference islandRef = storageRef.child(my.getPostimg());
+        final long ONE_MEGABYTE = 1024 * 1024;
+        islandRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                poimg.setImageBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+            }
+        });
+
 
         if(is_uid_isbn) {
             Thread mThread = new Thread() {
@@ -123,11 +142,10 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.ViewHolder> 
         else holder.poisfav.setImageResource(R.drawable.ic_favorite_gray_24dp);
 
         holder.poname.setText(my.getUname());
-        holder.podate.setText(my.getUname());
-        holder.pofavcount.setText(my.getFavcount());
-        holder.porevtext.setText(my.getUname());
+        holder.podate.setText(my.getDate());
+        holder.pofavcount.setText(String.valueOf(my.getFavcount()));
+        holder.porevtext.setText(my.getPosttext());
         holder.poratingbar.setNumStars(my.getStar());
-
         /*
 
         holder.nolay.setOnClickListener(new View.OnClickListener() {
