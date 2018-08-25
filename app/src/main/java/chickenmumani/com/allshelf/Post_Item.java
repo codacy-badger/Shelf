@@ -1,20 +1,18 @@
 package chickenmumani.com.allshelf;
 
-import android.graphics.drawable.Drawable;
-
 public class Post_Item {
 
     private String uid;
-    private Drawable profile;
+    private String profile;
     private String uname;
     private int star;
     private String date;
     private boolean isfav;
     private int favcount;
-    private Drawable postimg;
+    private String postimg;
     private String posttext;
 
-    public Post_Item(String uid, Drawable profile, String uname, int star, String date, boolean isfav, int favcount, Drawable postimg, String posttext) {
+    public Post_Item(String uid, String profile, String uname, int star, String date, boolean isfav, int favcount, String postimg, String posttext) {
         this.uid = uid;
         this.profile = profile;
         this.uname = uname;
@@ -34,11 +32,11 @@ public class Post_Item {
         this.uid = uid;
     }
 
-    public Drawable getProfile() {
+    public String getProfile() {
         return profile;
     }
 
-    public void setProfile(Drawable profile) {
+    public void setProfile(String profile) {
         this.profile = profile;
     }
 
@@ -66,7 +64,7 @@ public class Post_Item {
         this.date = date;
     }
 
-    public boolean isIsfav() {
+    public boolean getIsfav() {
         return isfav;
     }
 
@@ -82,11 +80,11 @@ public class Post_Item {
         this.favcount = favcount;
     }
 
-    public Drawable getPostimg() {
+    public String getPostimg() {
         return postimg;
     }
 
-    public void setPostimg(Drawable postimg) {
+    public void setPostimg(String postimg) {
         this.postimg = postimg;
     }
 

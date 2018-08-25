@@ -221,6 +221,26 @@ public class BookInfo_Activity extends AppCompatActivity {
             }
         });
 
+        Button see = (Button) findViewById(R.id.bookinfo_seereview);
+        see.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(BookInfo_Activity.this, Shelf_ReviewlistActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        Button see2 = (Button) findViewById(R.id.bookinfo_lookre);
+        see2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(BookInfo_Activity.this, Shelf_ReviewlistActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
 
     }
 

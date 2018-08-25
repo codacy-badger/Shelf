@@ -29,6 +29,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -218,7 +219,7 @@ public class Shelf_ImageFragment extends Fragment {
             }
         });
 
-        Button menub = (Button) view.findViewById(R.id.desk_menubutton);
+        ImageButton menub = (ImageButton) view.findViewById(R.id.desk_menubutton);
         menub.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -236,8 +237,8 @@ public class Shelf_ImageFragment extends Fragment {
             }
         });
 
-        Button timel = (Button) view.findViewById(R.id.desk_timelinebutton);
-        menub.setOnClickListener(new View.OnClickListener() {
+        ImageButton timel = (ImageButton) view.findViewById(R.id.desk_timelinebutton);
+        timel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), Shelf_TimelineActivity.class);
