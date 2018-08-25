@@ -120,12 +120,13 @@ public class Notice_Fragment extends Fragment {
         super.onDetach();
     }
 
-}
+    class TimingN implements Comparator<Notice_Item> {
+        @Override
+        public int compare(Notice_Item o1, Notice_Item o2) {
+            return o2.getDate().compareTo(o1.getDate());
+        }
 
-class TimingN implements Comparator<Notice_Item> {
-    @Override
-    public int compare(Notice_Item o1, Notice_Item o2) {
-        return o2.getDate().compareTo(o1.getDate());
     }
 
 }
+

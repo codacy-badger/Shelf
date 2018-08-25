@@ -308,28 +308,28 @@ public class Shelf_ImageFragment extends Fragment {
         sortb.setText(sorte);
         it = appData.getString("it","i");
     }
-}
 
-class TimingS implements Comparator<Shelf_Item> {
-    @Override
-    public int compare(Shelf_Item o1, Shelf_Item o2) {
-        return o2.getTime().compareTo(o1.getTime());
+    class TimingS implements Comparator<Shelf_Item> {
+        @Override
+        public int compare(Shelf_Item o1, Shelf_Item o2) {
+            return o2.getTime().compareTo(o1.getTime());
+        }
+
     }
 
-}
+    class TitlingS implements Comparator<Shelf_Item> {
+        @Override
+        public int compare(Shelf_Item o1, Shelf_Item o2) {
+            return o1.getTitle().compareTo(o2.getTitle());
+        }
 
-class TitlingS implements Comparator<Shelf_Item> {
-    @Override
-    public int compare(Shelf_Item o1, Shelf_Item o2) {
-        return o1.getTitle().compareTo(o2.getTitle());
     }
 
-}
+    class AuthoringS implements Comparator<Shelf_Item> {
+        @Override
+        public int compare(Shelf_Item o1, Shelf_Item o2) {
+            return o1.getAuthor().compareTo(o2.getAuthor());
+        }
 
-class AuthoringS implements Comparator<Shelf_Item> {
-    @Override
-    public int compare(Shelf_Item o1, Shelf_Item o2) {
-        return o1.getAuthor().compareTo(o2.getAuthor());
     }
-
 }

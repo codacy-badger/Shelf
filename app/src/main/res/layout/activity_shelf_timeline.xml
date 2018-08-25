@@ -136,6 +136,6 @@
         android:layout_margin="8dp"
         android:gravity="center_horizontal"
         android:scrollbars="vertical"
-        tools:listitem="@layout/view_post"></android.support.v7.widget.RecyclerView>
+        tools:listitem="@layout/view_post"/>
 
 </LinearLayout>

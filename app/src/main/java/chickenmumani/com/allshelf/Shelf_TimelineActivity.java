@@ -10,6 +10,7 @@ import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
@@ -51,6 +52,7 @@ public class Shelf_TimelineActivity extends AppCompatActivity {
         final ImageView proimg = (ImageView) findViewById(R.id.timeline_img);
         TextView nameT = (TextView) findViewById(R.id.timeline_name);
         nameT.setText(uname);
+        final ArrayList<String> reviewlist = new ArrayList<String>();
 
         mDatabase = FirebaseDatabase.getInstance().getReference("User_Info")
                 .child(uid).child("Profile_Image");
@@ -104,51 +106,85 @@ public class Shelf_TimelineActivity extends AppCompatActivity {
                 .child("User").child(uid);
 
         Log.d("w","review loading started");
+
+        final Thread mThread = new Thread() {
+            @Override
+            public void run() {
+                myList.clear();
+                Log.d("w", "thread started");
+                for(String n : reviewlist) {
+                    DatabaseReference mDatabase2 = FirebaseDatabase.getInstance().getReference("Review")
+                            .child("ReviewList").child(n);
+                    Log.d("w", mDatabase2.toString());
+                    ValueEventListener postListener2 = new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Log.d("w", dataSnapshot.toString());
+                            Map<String,Object> map = (Map<String,Object>) dataSnapshot.getValue();
+                            Map<String,Object> mapUser = (Map<String,Object>) map.get("UserInfo");
+                            Map<String,Object> mapFav = (Map<String,Object>) map.get("Good");
+                            myList.add(new Post_Item(mapUser.get("uid").toString(), mapUser.get("proimg").toString(),
+                                    mapUser.get("name").toString(), Integer.parseInt(map.get("Rate").toString()),
+                                    map.get("Time").toString(), FALSE, Integer.parseInt(mapFav.get("Count").toString()),
+                                    map.get("Image").toString(), map.get("Text").toString()
+                            ));
+                            Log.d("w","added");
+                        }
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                        }
+                    };
+                    mDatabase2.addValueEventListener(postListener2);
+                }
+            }
+        };
+
+
         ValueEventListener postListener3 = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.d("w","data changing");
-                Log.d("w", dataSnapshot.toString());
-                myList.clear();
                 for(DataSnapshot ds : dataSnapshot.getChildren()) {
                     try {
-                        Log.d("w", ds.toString());
-                        DatabaseReference mDatabase2 = FirebaseDatabase.getInstance().getReference("Review")
-                                .child("ReviewList").child((String)ds.getValue());
-                        ValueEventListener postListener2 = new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                Log.d("w", dataSnapshot.toString());
-                                Map<String,Object> map = (Map<String,Object>) dataSnapshot.getValue();
-                                Map<String,Object> mapUser = (Map<String,Object>) map.get("UserInfo");
-                                Map<String,Object> mapFav = (Map<String,Object>) map.get("Good");
-                                myList.add(new Post_Item(mapUser.get("uid").toString(), mapUser.get("proimg").toString(),
-                                        mapUser.get("name").toString(), Integer.parseInt(map.get("Rate").toString()),
-                                        map.get("Time").toString(), FALSE, Integer.parseInt(mapFav.get("Good").toString()),
-                                        map.get("Image").toString(), map.get("Text").toString()
-                                        ));
-                            }
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-                            }
-                        };
-                        mDatabase2.addValueEventListener(postListener2);
-
-
+                        reviewlist.add(ds.getValue().toString());
                     } catch(Exception e) {
                     }
                 }
-                Shelf_TimelineActivity.get();
+
+                mThread.start();
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
             }
         };
-        mDatabase.addValueEventListener(postListener3);
+
+        mDatabase.addListenerForSingleValueEvent(postListener3);
         Log.d("w","review loading started2222");
+
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
 
         mAdapter = new Post_Adapter(myList, uid, uname, upro);
         mRecyclerView.setAdapter(mAdapter);
+
+        /*
+
+        Thread mThread2 = new Thread() {
+            @Override
+            public void run() {
+                while(true) {
+                    try {
+                        sleep(300);
+                        Log.d("w", String.valueOf(myList.size()));
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+        };
+
+        mThread2.start();
+        */
 
     }
 
