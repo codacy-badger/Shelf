@@ -8,11 +8,13 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
@@ -22,6 +24,8 @@ import com.bumptech.glide.Glide;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -50,6 +54,7 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.ViewHolder> 
     StorageReference storageRef;
     private DatabaseReference mDatabase;
     public View mView;
+    FirebaseUser user;
 
     public Post_Adapter(List<Post_Item> list, String uid, String uname, Drawable upro) {
         this.myList = list;
@@ -57,6 +62,7 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.ViewHolder> 
         this.uname = uname;
         this.upro = upro;
         is_uid_isbn = FALSE;
+        user = FirebaseAuth.getInstance().getCurrentUser();
     }
 
     public Post_Adapter(List<Post_Item> list, String isbn) {
@@ -147,17 +153,14 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.ViewHolder> 
         holder.porevtext.setText(my.getPosttext());
         holder.poratingbar.setNumStars(my.getStar());
 
-        /*
-
-        holder.nolay.setOnClickListener(new View.OnClickListener() {
+        holder.pobutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
-                Context context = v.getContext();
-                Intent intent = new Intent(context, BookInfo_Activity.class);
-                intent.putExtra("barcodeContents",my.getIsbn());
-                context.startActivity(intent);
+                PopupMenu popup = new PopupMenu(holder.pobutton.getContext(), holder.pobutton);
+                if(user.getUid().equals(uid)) popup.inflate(R.menu.post_menu2);
+                else popup.inflate(R.menu.post_menu1);
             }
-        });*/
+        });
     }
 
     @Override
@@ -175,6 +178,7 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.ViewHolder> 
         public ImageView poisfav;
         public ImageView poimg;
         public TextView porevtext;
+        public ImageView pobutton;
 
         public ViewHolder(View view) {
             super(view);
@@ -184,9 +188,10 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.ViewHolder> 
             poratingbar = (RatingBar)view.findViewById(R.id.post_ratingbar);
             podate = (TextView)view.findViewById(R.id.post_date);
             pofavcount = (TextView)view.findViewById(R.id.post_favcount);
-            poisfav = (ImageView) view.findViewById(R.id.post_isfav);
+            poisfav = (ImageButton) view.findViewById(R.id.post_isfav);
             poimg = (ImageView) view.findViewById(R.id.post_revimg);
             porevtext = (TextView) view.findViewById(R.id.post_revtext);
+            pobutton = (ImageButton) view.findViewById(R.id.post_button);
         }
 
     }

@@ -132,7 +132,6 @@ public class Shelf_TimelineActivity extends AppCompatActivity {
                     ValueEventListener postListener2 = new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            Log.d("w", dataSnapshot.toString());
                             Map<String,Object> map = (Map<String,Object>) dataSnapshot.getValue();
                             Map<String,Object> mapUser = (Map<String,Object>) map.get("UserInfo");
                             Map<String,Object> mapFav = (Map<String,Object>) map.get("Good");
