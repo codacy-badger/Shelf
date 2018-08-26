@@ -113,6 +113,7 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.ViewHolder> 
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             String urls = (String)dataSnapshot.getValue();
                             try {
+                                Log.d("w", urls);
                                 URL url = new URL(urls);
 
                                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();

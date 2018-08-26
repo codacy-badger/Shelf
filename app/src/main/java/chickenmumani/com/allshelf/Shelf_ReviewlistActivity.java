@@ -9,6 +9,7 @@ import android.graphics.drawable.shapes.OvalShape;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
@@ -24,7 +25,13 @@ import com.google.firebase.database.ValueEventListener;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Map;
+
+import static java.lang.Boolean.FALSE;
 
 public class Shelf_ReviewlistActivity extends AppCompatActivity {
 
@@ -32,7 +39,7 @@ public class Shelf_ReviewlistActivity extends AppCompatActivity {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private DatabaseReference mDatabase;
-    private int count, allcount;
+    private int count, allcount, sumrate;
     String uname, bookname, isbn, coverurl;
     Drawable upro;
     Thread mThread1;
@@ -48,8 +55,6 @@ public class Shelf_ReviewlistActivity extends AppCompatActivity {
         bookname = intent.getStringExtra("bookname");
         isbn = intent.getStringExtra("isbn");
         coverurl = intent.getStringExtra("cover");
-
-        Log.d("w", bookname + isbn + coverurl);
 
         ((TextView)findViewById(R.id.reviewlist_name)).setText(bookname);
         setTitle(bookname);
@@ -91,6 +96,76 @@ public class Shelf_ReviewlistActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference("Review")
                 .child("Book").child(isbn);
 
+        final Thread mThread = new Thread() {
+            @Override
+            public void run() {
+                myList.clear();
+                count = 0;
+                sumrate = 0;
+                allcount = reviewlist.size();
+                runOnUiThread(new Runnable(){
+                    @Override
+                    public void run() {
+                        ((TextView)findViewById(R.id.reviewlist_reviewcount)).setText(String.valueOf(allcount));
+                    }
+                });
+                for(String n : reviewlist) {
+                    DatabaseReference mDatabase2 = FirebaseDatabase.getInstance().getReference("Review")
+                            .child("ReviewList").child(n);
+                    ValueEventListener postListener2 = new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Map<String,Object> map = (Map<String,Object>) dataSnapshot.getValue();
+                            Map<String,Object> mapUser = (Map<String,Object>) map.get("UserInfo");
+                            Map<String,Object> mapFav = (Map<String,Object>) map.get("Good");
+                            myList.add(new Post_Item(mapUser.get("uid").toString(), mapUser.get("proimg").toString(),
+                                    mapUser.get("name").toString(), Integer.parseInt(map.get("Rate").toString()),
+                                    map.get("Time").toString(), FALSE, Integer.parseInt(mapFav.get("Count").toString()),
+                                    map.get("Image").toString(), map.get("Text").toString()
+                            ));
+                            sumrate += Integer.parseInt(map.get("Rate").toString());
+                            count++;
+                            if(allcount == count) {
+                                DecimalFormat REAL_FORMATTER = new DecimalFormat("0.00");
+                                Double avgrate = (double) sumrate / count;
+                                ((TextView)findViewById(R.id.reviewlist_sumrate)).setText(REAL_FORMATTER.format(avgrate));
+                                Collections.sort(myList,new TimingP());
+                                mAdapter = new Post_Adapter(myList, isbn);
+                                mRecyclerView.setAdapter(mAdapter);
+                            }
+                        }
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                        }
+                    };
+                    mDatabase2.addListenerForSingleValueEvent(postListener2);
+                }
+            }
+        };
+
+
+        ValueEventListener postListener3 = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                    try {
+                        reviewlist.add(ds.getValue().toString());
+                    } catch(Exception e) {
+                    }
+                }
+
+                mThread.start();
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        };
+
+        mDatabase.addListenerForSingleValueEvent(postListener3);
+
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
 
     }
 
@@ -103,5 +178,13 @@ public class Shelf_ReviewlistActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    class TimingP implements Comparator<Post_Item> {
+        @Override
+        public int compare(Post_Item o1, Post_Item o2) {
+            return o2.getDate().compareTo(o1.getDate());
+        }
+
     }
 }

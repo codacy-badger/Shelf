@@ -112,7 +112,7 @@ public class BookInfo_Activity extends AppCompatActivity {
 
                             isbn = bInfo.get(4);
                             bookname = bInfo.get(0);
-                            coverurl = bInfo.get(5);
+                            coverurl = bInfo.get(6);
 
                             vPur.setOnClickListener(new View.OnClickListener() {
                                 @Override
