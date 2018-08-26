@@ -241,8 +241,8 @@ public class Review_WriteActivity extends AppCompatActivity {
                     Intent intent = new Intent("com.android.camera.action.CROP");
                     intent.setDataAndType(selectedImage, "image/*");
 
-                    intent.putExtra("outputX", 90);
-                    intent.putExtra("outputY", 90);
+                    intent.putExtra("outputX", 500);
+                    intent.putExtra("outputY", 500);
                     intent.putExtra("aspectX", 1);
                     intent.putExtra("aspectY", 1);
                     intent.putExtra("scale", true);

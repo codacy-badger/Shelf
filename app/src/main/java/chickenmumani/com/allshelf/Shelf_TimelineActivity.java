@@ -163,10 +163,10 @@ public class Shelf_TimelineActivity extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        myList.add(new Post_Item("GwDXbIh64AeOH5dM29Wj3pg4yKc2",
+        /*yList.add(new Post_Item("GwDXbIh64AeOH5dM29Wj3pg4yKc2",
                 "https://lh4.googleusercontent.com/-KMK_rO0bACc/AAAAAAAAAAI/AAAAAAAAC6k/cCx-jNcjVOs/s96-c/photo.jpg",
                 "달팡퐁", 4, "2018-08-25 17:09", FALSE, 67,
-                "Review_Image/9788993178258_w92K9tUTyWTNEDZPxwwynnfzRdz1.jpg", "좋았다"));
+                "Review_Image/9788993178258_w92K9tUTyWTNEDZPxwwynnfzRdz1.jpg", "좋았다")); */
 
         mAdapter = new Post_Adapter(myList, uid, uname, upro);
         mRecyclerView.setAdapter(mAdapter);
