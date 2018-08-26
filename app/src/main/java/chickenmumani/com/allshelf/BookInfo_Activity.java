@@ -55,7 +55,7 @@ public class BookInfo_Activity extends AppCompatActivity {
     Bitmap bitmap;
     private DatabaseReference mDatabase;
     private FirebaseAuth mAuth;
-    String isbn;
+    String isbn, bookname, coverurl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +111,8 @@ public class BookInfo_Activity extends AppCompatActivity {
                             vISBN.setText(bInfo.get(4));
 
                             isbn = bInfo.get(4);
+                            bookname = bInfo.get(0);
+                            coverurl = bInfo.get(5);
 
                             vPur.setOnClickListener(new View.OnClickListener() {
                                 @Override
@@ -227,6 +229,10 @@ public class BookInfo_Activity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(BookInfo_Activity.this, Shelf_ReviewlistActivity.class);
+                intent.putExtra("uid",user.getUid());
+                intent.putExtra("isbn",isbn);
+                intent.putExtra("bookname",bookname);
+                intent.putExtra("cover",coverurl);
                 startActivity(intent);
                 finish();
             }
@@ -237,6 +243,10 @@ public class BookInfo_Activity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(BookInfo_Activity.this, Shelf_ReviewlistActivity.class);
+                intent.putExtra("uid",user.getUid());
+                intent.putExtra("isbn",isbn);
+                intent.putExtra("bookname",bookname);
+                intent.putExtra("cover",coverurl);
                 startActivity(intent);
                 finish();
             }

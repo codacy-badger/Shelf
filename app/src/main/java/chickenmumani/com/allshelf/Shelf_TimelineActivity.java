@@ -98,7 +98,7 @@ public class Shelf_TimelineActivity extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
             }
         };
-        mDatabase.addValueEventListener(postListener);
+        mDatabase.addListenerForSingleValueEvent(postListener);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.timeline_recyclerview);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(Shelf_TimelineActivity.this, DividerItemDecoration.VERTICAL));
@@ -151,7 +151,7 @@ public class Shelf_TimelineActivity extends AppCompatActivity {
                         public void onCancelled(DatabaseError databaseError) {
                         }
                     };
-                    mDatabase2.addValueEventListener(postListener2);
+                    mDatabase2.addListenerForSingleValueEvent(postListener2);
                 }
             }
         };
@@ -178,27 +178,6 @@ public class Shelf_TimelineActivity extends AppCompatActivity {
 
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-
-
-        /*
-
-        Thread mThread2 = new Thread() {
-            @Override
-            public void run() {
-                while(true) {
-                    try {
-                        sleep(300);
-                        Log.d("w", String.valueOf(myList.size()));
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-            }
-        };
-
-        mThread2.start();
-        */
 
     }
 
