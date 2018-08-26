@@ -104,6 +104,14 @@ public class BookInfo_Activity extends AppCompatActivity {
                             Button vAdd = (Button) findViewById(R.id.bookinfo_regist);
                             ImageView img = (ImageView) findViewById(R.id.bookinfo_img);
 
+                            vTitle.setText(bInfo.get(0));
+                            vAuthor.setText(bInfo.get(1));
+                            vPublisher.setText(bInfo.get(2));
+                            vPubDate.setText(bInfo.get(3));
+                            vISBN.setText(bInfo.get(4));
+
+                            isbn = bInfo.get(4);
+
                             vPur.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
@@ -133,13 +141,6 @@ public class BookInfo_Activity extends AppCompatActivity {
                             try {
                                 mThread.join();
                                 img.setImageBitmap(bitmap);
-                                vTitle.setText(bInfo.get(0));
-                                vAuthor.setText(bInfo.get(1));
-                                vPublisher.setText(bInfo.get(2));
-                                vPubDate.setText(bInfo.get(3));
-                                vISBN.setText(bInfo.get(4));
-
-                                isbn = bInfo.get(4);
                             } catch (Exception e) {
                                 /*
                                 AlertDialog.Builder builder = new AlertDialog.Builder(BookInfo_Activity.this);     // 여기서 this는 Activity의 this

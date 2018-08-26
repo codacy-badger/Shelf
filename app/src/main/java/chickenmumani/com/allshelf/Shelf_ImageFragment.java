@@ -254,7 +254,7 @@ public class Shelf_ImageFragment extends Fragment {
     public void onResume(){
         super.onResume();
         ((Navi_Activity) getActivity())
-                .setActionBarTitle("책장");
+                .setActionBarTitle("서재");
 
     }
 

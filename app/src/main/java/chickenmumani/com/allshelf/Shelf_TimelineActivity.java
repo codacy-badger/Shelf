@@ -27,6 +27,8 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Map;
 
 import static java.lang.Boolean.FALSE;
@@ -37,64 +39,66 @@ public class Shelf_TimelineActivity extends AppCompatActivity {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private DatabaseReference mDatabase;
+    private int count, allcount;
+    String uname;
+    Drawable upro;
+    Thread mThread1;
+    String urls;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shelf_timeline);
-        setTitle("리뷰");
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent intent = getIntent();
         final String uid = intent.getStringExtra("uid");
-        String uname = intent.getStringExtra("uname");
-        Drawable upro;
+        uname = intent.getStringExtra("uname");
+        setTitle(uname);
+
         final ImageView proimg = (ImageView) findViewById(R.id.timeline_img);
         TextView nameT = (TextView) findViewById(R.id.timeline_name);
         nameT.setText(uname);
         final ArrayList<String> reviewlist = new ArrayList<String>();
+
+        mThread1 = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    URL url = new URL(urls);
+
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setDoInput(true);
+                    conn.connect();
+
+                    InputStream is = conn.getInputStream();
+                    final Bitmap apro = BitmapFactory.decodeStream(is);
+                    runOnUiThread(new Runnable(){
+                        @Override
+                        public void run() {
+                            proimg.setImageBitmap(apro);
+                            proimg.setBackground(new ShapeDrawable(new OvalShape()));
+                            proimg.setClipToOutline(true);
+                            upro = proimg.getDrawable();
+                        }
+                    });
+                } catch (Exception e) { e.printStackTrace(); }
+            }
+        };
 
         mDatabase = FirebaseDatabase.getInstance().getReference("User_Info")
                 .child(uid).child("Profile_Image");
         ValueEventListener postListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                final String urls = (String)dataSnapshot.getValue();
-                Thread mThread = new Thread() {
-                    @Override
-                    public void run() {
-                        try {
-                            URL url = new URL(urls);
-
-                            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                            conn.setDoInput(true);
-                            conn.connect();
-
-                            InputStream is = conn.getInputStream();
-                            final Bitmap apro = BitmapFactory.decodeStream(is);
-                            runOnUiThread(new Runnable(){
-                                @Override
-                                public void run() {
-                                    proimg.setImageBitmap(apro);
-                                    proimg.setBackground(new ShapeDrawable(new OvalShape()));
-                                    proimg.setClipToOutline(true);
-                                }
-                            });
-                        } catch (Exception e) { e.printStackTrace(); }
-                    }
-                };
-                mThread.start();
-
-                try {
-                    mThread.join();
-                } catch (Exception e) { e.printStackTrace(); }
+                urls = (String)dataSnapshot.getValue();
+                mThread1.start();
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
             }
         };
         mDatabase.addValueEventListener(postListener);
-        upro = proimg.getDrawable();
 
         mRecyclerView = (RecyclerView) findViewById(R.id.timeline_recyclerview);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(Shelf_TimelineActivity.this, DividerItemDecoration.VERTICAL));
@@ -104,18 +108,27 @@ public class Shelf_TimelineActivity extends AppCompatActivity {
 
         mDatabase = FirebaseDatabase.getInstance().getReference("Review")
                 .child("User").child(uid);
-
-        Log.d("w","review loading started");
+        try {
+            mThread1.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         final Thread mThread = new Thread() {
             @Override
             public void run() {
                 myList.clear();
-                Log.d("w", "thread started");
+                count = 0;
+                allcount = reviewlist.size();
+                runOnUiThread(new Runnable(){
+                    @Override
+                    public void run() {
+                        ((TextView)findViewById(R.id.timeline_reviewcount)).setText(String.valueOf(allcount));
+                    }
+                });
                 for(String n : reviewlist) {
                     DatabaseReference mDatabase2 = FirebaseDatabase.getInstance().getReference("Review")
                             .child("ReviewList").child(n);
-                    Log.d("w", mDatabase2.toString());
                     ValueEventListener postListener2 = new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -128,7 +141,12 @@ public class Shelf_TimelineActivity extends AppCompatActivity {
                                     map.get("Time").toString(), FALSE, Integer.parseInt(mapFav.get("Count").toString()),
                                     map.get("Image").toString(), map.get("Text").toString()
                             ));
-                            Log.d("w",myList.toString());
+                            count++;
+                            if(allcount == count) {
+                                Collections.sort(myList,new TimingP());
+                                mAdapter = new Post_Adapter(myList, uid, uname, upro);
+                                mRecyclerView.setAdapter(mAdapter);
+                            }
                         }
                         @Override
                         public void onCancelled(DatabaseError databaseError) {
@@ -158,18 +176,10 @@ public class Shelf_TimelineActivity extends AppCompatActivity {
         };
 
         mDatabase.addListenerForSingleValueEvent(postListener3);
-        Log.d("w","review loading started2222");
 
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        /*yList.add(new Post_Item("GwDXbIh64AeOH5dM29Wj3pg4yKc2",
-                "https://lh4.googleusercontent.com/-KMK_rO0bACc/AAAAAAAAAAI/AAAAAAAAC6k/cCx-jNcjVOs/s96-c/photo.jpg",
-                "달팡퐁", 4, "2018-08-25 17:09", FALSE, 67,
-                "Review_Image/9788993178258_w92K9tUTyWTNEDZPxwwynnfzRdz1.jpg", "좋았다")); */
-
-        mAdapter = new Post_Adapter(myList, uid, uname, upro);
-        mRecyclerView.setAdapter(mAdapter);
 
         /*
 
@@ -202,5 +212,13 @@ public class Shelf_TimelineActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    class TimingP implements Comparator<Post_Item> {
+        @Override
+        public int compare(Post_Item o1, Post_Item o2) {
+            return o2.getDate().compareTo(o1.getDate());
+        }
+
     }
 }

@@ -80,8 +80,6 @@
 
         </LinearLayout>
 
-
-
         <ImageView
             android:id="@+id/post_button"
             android:layout_width="wrap_content"
@@ -101,7 +99,7 @@
         android:adjustViewBounds="true"
         android:layout_marginTop="15dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/ic_camera_alt_black_24dp"/>
+        android:src="@drawable/progressbar_states"/>
 
     <TextView
         android:id="@+id/post_revtext"

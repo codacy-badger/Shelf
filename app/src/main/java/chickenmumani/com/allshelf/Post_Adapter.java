@@ -5,8 +5,11 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.OvalShape;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,12 +82,6 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.ViewHolder> 
         storage = FirebaseStorage.getInstance();
         storageRef = storage.getReference();
 
-
-/*
-        Glide.with(mView)
-                .load(storageRef.child(my.getPostimg()))
-                .into(poimg);
-*/
         StorageReference islandRef = storageRef.child(my.getPostimg());
         final long ONE_MEGABYTE = 1024 * 1024;
         islandRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
@@ -138,6 +135,9 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.ViewHolder> 
             popro.setImageDrawable(upro);
         }
 
+        popro.setBackground(new ShapeDrawable(new OvalShape()));
+        popro.setClipToOutline(true);
+
         if(my.getIsfav()) holder.poisfav.setImageResource(R.drawable.ic_favorite_orange_24dp);
         else holder.poisfav.setImageResource(R.drawable.ic_favorite_gray_24dp);
 
@@ -146,6 +146,7 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.ViewHolder> 
         holder.pofavcount.setText(String.valueOf(my.getFavcount()));
         holder.porevtext.setText(my.getPosttext());
         holder.poratingbar.setNumStars(my.getStar());
+
         /*
 
         holder.nolay.setOnClickListener(new View.OnClickListener() {

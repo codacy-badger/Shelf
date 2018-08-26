@@ -37,8 +37,7 @@
         <TextView
             android:id="@+id/bookinfo_bookname"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="선종킴의 하루"/>
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
     <LinearLayout
@@ -55,8 +54,7 @@
         <TextView
             android:id="@+id/bookinfo_author"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="영인킴"/>
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
     <LinearLayout
@@ -73,8 +71,7 @@
         <TextView
             android:id="@+id/bookinfo_company"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="부산대출판부"/>
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
     <LinearLayout
@@ -91,8 +88,7 @@
         <TextView
             android:id="@+id/bookinfo_date"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="2018-12-24"/>
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
     <LinearLayout
@@ -109,8 +105,7 @@
         <TextView
             android:id="@+id/bookinfo_isbn"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="123-45-67890-01-2"/>
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
     <FrameLayout

@@ -43,6 +43,7 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 
 import chickenmumani.com.allshelf.R;
 
@@ -178,7 +179,7 @@ public class Review_WriteActivity extends AppCompatActivity {
                                 reviewcount = (int)(long)mutableData.getValue();
                                 reviewcount++;
                                 mutableData.setValue(reviewcount);
-                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm", Locale.KOREA);
                                 Date date = new Date(System.currentTimeMillis());
                                 String getTime = sdf.format(date);
                                 DatabaseReference tdata = mDatabase.child("Review").child("ReviewList").child(String.valueOf(reviewcount));
