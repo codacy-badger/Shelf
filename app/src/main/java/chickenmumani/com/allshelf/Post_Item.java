@@ -3,6 +3,7 @@ package chickenmumani.com.allshelf;
 public class Post_Item {
 
     private String uid;
+    private String book;
     private String profile;
     private String uname;
     private int star;
@@ -12,8 +13,9 @@ public class Post_Item {
     private String postimg;
     private String posttext;
 
-    public Post_Item(String uid, String profile, String uname, int star, String date, boolean isfav, int favcount, String postimg, String posttext) {
+    public Post_Item(String uid, String book, String profile, String uname, int star, String date, boolean isfav, int favcount, String postimg, String posttext) {
         this.uid = uid;
+        this.book = book;
         this.profile = profile;
         this.uname = uname;
         this.star = star;
@@ -30,6 +32,14 @@ public class Post_Item {
 
     public void setUid(String uid) {
         this.uid = uid;
+    }
+
+    public String getBook() {
+        return book;
+    }
+
+    public void setBook(String uid) {
+        this.book = uid;
     }
 
     public String getProfile() {

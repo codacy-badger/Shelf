@@ -103,6 +103,7 @@ public class Shelf_TimelineActivity extends AppCompatActivity {
         mRecyclerView = (RecyclerView) findViewById(R.id.timeline_recyclerview);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(Shelf_TimelineActivity.this, DividerItemDecoration.VERTICAL));
         mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setNestedScrollingEnabled(false);
 
         final ArrayList<Post_Item> myList = new ArrayList<Post_Item>();
 
@@ -135,9 +136,10 @@ public class Shelf_TimelineActivity extends AppCompatActivity {
                             Map<String,Object> map = (Map<String,Object>) dataSnapshot.getValue();
                             Map<String,Object> mapUser = (Map<String,Object>) map.get("UserInfo");
                             Map<String,Object> mapFav = (Map<String,Object>) map.get("Good");
-                            myList.add(new Post_Item(mapUser.get("uid").toString(), mapUser.get("proimg").toString(),
-                                    mapUser.get("name").toString(), Integer.parseInt(map.get("Rate").toString()),
-                                    map.get("Time").toString(), FALSE, Integer.parseInt(mapFav.get("Count").toString()),
+                            myList.add(new Post_Item(mapUser.get("uid").toString(), map.get("Book").toString(),
+                                    mapUser.get("proimg").toString(), mapUser.get("name").toString(),
+                                    Integer.parseInt(map.get("Rate").toString()), map.get("Time").toString(),
+                                    FALSE, Integer.parseInt(mapFav.get("Count").toString()),
                                     map.get("Image").toString(), map.get("Text").toString()
                             ));
                             count++;

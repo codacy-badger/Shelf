@@ -13,6 +13,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -62,11 +64,19 @@ public class Shelf_ReviewlistActivity extends AppCompatActivity {
         final ImageView proimg = (ImageView) findViewById(R.id.reviewlist_img);
         final ArrayList<String> reviewlist = new ArrayList<String>();
 
+        ((Button)findViewById(R.id.reviewlist_button)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Shelf_ReviewlistActivity.this, BookInfo_Activity.class);
+                intent.putExtra("barcodeContents",isbn);
+                startActivity(intent);
+            }
+        });
+
         mThread1 = new Thread() {
             @Override
             public void run() {
                 try {
-                    Log.d("w",coverurl);
                     URL url = new URL(coverurl);
 
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -118,9 +128,10 @@ public class Shelf_ReviewlistActivity extends AppCompatActivity {
                             Map<String,Object> map = (Map<String,Object>) dataSnapshot.getValue();
                             Map<String,Object> mapUser = (Map<String,Object>) map.get("UserInfo");
                             Map<String,Object> mapFav = (Map<String,Object>) map.get("Good");
-                            myList.add(new Post_Item(mapUser.get("uid").toString(), mapUser.get("proimg").toString(),
-                                    mapUser.get("name").toString(), Integer.parseInt(map.get("Rate").toString()),
-                                    map.get("Time").toString(), FALSE, Integer.parseInt(mapFav.get("Count").toString()),
+                            myList.add(new Post_Item(mapUser.get("uid").toString(), map.get("Book").toString(),
+                                    mapUser.get("proimg").toString(), mapUser.get("name").toString(),
+                                    Integer.parseInt(map.get("Rate").toString()), map.get("Time").toString(),
+                                    FALSE, Integer.parseInt(mapFav.get("Count").toString()),
                                     map.get("Image").toString(), map.get("Text").toString()
                             ));
                             sumrate += Integer.parseInt(map.get("Rate").toString());
@@ -130,7 +141,7 @@ public class Shelf_ReviewlistActivity extends AppCompatActivity {
                                 Double avgrate = (double) sumrate / count;
                                 ((TextView)findViewById(R.id.reviewlist_sumrate)).setText(REAL_FORMATTER.format(avgrate));
                                 Collections.sort(myList,new TimingP());
-                                mAdapter = new Post_Adapter(myList, isbn);
+                                mAdapter = new Post_Adapter(myList, isbn, bookname);
                                 mRecyclerView.setAdapter(mAdapter);
                             }
                         }

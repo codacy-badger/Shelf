@@ -9,7 +9,7 @@
 
     <ImageView
         android:id="@+id/shelfview_img"
-        android:src="@drawable/mumani_background"
+        android:src="@drawable/png_mumani_background"
         android:layout_width="match_parent"
         android:layout_height="110dp" />
 

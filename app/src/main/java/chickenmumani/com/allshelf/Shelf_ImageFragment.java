@@ -107,6 +107,21 @@ public class Shelf_ImageFragment extends Fragment {
                 }
 
                 if(check == 1) {
+                    // specify an adapter (see also next example)
+                    if(sortb.getText() == "최신등록순") {
+                        Collections.sort(myList,new TimingS());
+                        mAdapter = new Shelf_ImageAdapter(myList, it);
+                        mRecyclerView.setAdapter(mAdapter);
+                    } else if(sortb.getText() == "도서명순") {
+                        Collections.sort(myList,new TitlingS());
+                        mAdapter = new Shelf_ImageAdapter(myList, it);
+                        mRecyclerView.setAdapter(mAdapter);
+                    } else if(sortb.getText() == "저자명순") {
+                        Collections.sort(myList,new AuthoringS());
+                        mAdapter = new Shelf_ImageAdapter(myList, it);
+                        mRecyclerView.setAdapter(mAdapter);
+                    }
+
                     mAdapter = new Shelf_ImageAdapter(myList, it);
                     mRecyclerView.setAdapter(mAdapter);
                 }
@@ -130,21 +145,6 @@ public class Shelf_ImageFragment extends Fragment {
             // use a linear layout manager
             mLayoutManager = new LinearLayoutManager(context);
             mRecyclerView.setLayoutManager(mLayoutManager);
-
-            // specify an adapter (see also next example)
-            if(sortb.getText() == "최신등록순") {
-                Collections.sort(myList,new TimingS());
-                mAdapter = new Shelf_ImageAdapter(myList, it);
-                mRecyclerView.setAdapter(mAdapter);
-            } else if(sortb.getText() == "도서명순") {
-                Collections.sort(myList,new TitlingS());
-                mAdapter = new Shelf_ImageAdapter(myList, it);
-                mRecyclerView.setAdapter(mAdapter);
-            } else if(sortb.getText() == "저자명순") {
-                Collections.sort(myList,new AuthoringS());
-                mAdapter = new Shelf_ImageAdapter(myList, it);
-                mRecyclerView.setAdapter(mAdapter);
-            }
         }
 
         fab_open = AnimationUtils.loadAnimation(getActivity().getApplicationContext(), R.anim.fab_open);

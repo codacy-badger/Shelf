@@ -1,5 +1,6 @@
 package chickenmumani.com.allshelf;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -49,7 +50,7 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.ViewHolder> 
     Bitmap bitmap;
     Drawable upro;
     boolean is_uid_isbn;
-    String uid, uname, isbn;
+    String uid, uname, isbn, urls, bookname;
     FirebaseStorage storage;
     StorageReference storageRef;
     private DatabaseReference mDatabase;
@@ -65,10 +66,12 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.ViewHolder> 
         user = FirebaseAuth.getInstance().getCurrentUser();
     }
 
-    public Post_Adapter(List<Post_Item> list, String isbn) {
+    public Post_Adapter(List<Post_Item> list, String isbn, String bookname) {
         this.myList = list;
         this.isbn = isbn;
+        this.bookname = bookname;
         is_uid_isbn = TRUE;
+        user = FirebaseAuth.getInstance().getCurrentUser();
     }
 
     @Override
@@ -103,17 +106,17 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.ViewHolder> 
 
 
         if(is_uid_isbn) {
-            Thread mThread = new Thread() {
+            mDatabase = FirebaseDatabase.getInstance().getReference("User_Info")
+                    .child(my.getUid()).child("Profile_Image");
+            ValueEventListener postListener = new ValueEventListener() {
                 @Override
-                public void run() {
-                    mDatabase = FirebaseDatabase.getInstance().getReference("User_Info")
-                            .child(my.getUid()).child("Profile_URL");
-                    ValueEventListener postListener = new ValueEventListener() {
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    urls = (String)dataSnapshot.getValue();
+                    Thread mThread = new Thread() {
                         @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            String urls = (String)dataSnapshot.getValue();
+                        public void run() {
+
                             try {
-                                Log.d("w", urls);
                                 URL url = new URL(urls);
 
                                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -124,20 +127,19 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.ViewHolder> 
                                 bitmap = BitmapFactory.decodeStream(is);
                             } catch (Exception e) { e.printStackTrace(); }
                         }
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-                        }
                     };
-                    mDatabase.addListenerForSingleValueEvent(postListener);
+                    mThread.start();
+                    try {
+                        mThread.join();
+                        popro.setImageBitmap(bitmap);
+                    } catch (Exception e) { e.printStackTrace(); }
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
                 }
             };
+            mDatabase.addListenerForSingleValueEvent(postListener);
 
-            mThread.start();
-
-            try {
-                mThread.join();
-                popro.setImageBitmap(bitmap);
-            } catch (Exception e) { e.printStackTrace(); }
         } else {
             popro.setImageDrawable(upro);
         }
@@ -153,6 +155,7 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.ViewHolder> 
         holder.pofavcount.setText(String.valueOf(my.getFavcount()));
         holder.porevtext.setText(my.getPosttext());
         holder.poratingbar.setNumStars(my.getStar());
+        holder.pobook.setText(my.getBook());
 
         holder.pobutton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,6 +163,47 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.ViewHolder> 
                 PopupMenu popup = new PopupMenu(holder.pobutton.getContext(), holder.pobutton);
                 if(user.getUid().equals(uid)) popup.inflate(R.menu.post_menu2);
                 else popup.inflate(R.menu.post_menu1);
+            }
+        });
+
+        holder.poname.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), Shelf_TimelineActivity.class);
+                intent.putExtra("uid", my.getUid());
+                intent.putExtra("uname", my.getUname());
+                view.getContext().startActivity(intent);
+                if(user.getUid().equals(my.getUid()) && !is_uid_isbn) {
+                    ((Activity)view.getContext()).finish();
+                }
+            }
+        });
+
+        holder.popro.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), Shelf_TimelineActivity.class);
+                intent.putExtra("uid", my.getUid());
+                intent.putExtra("uname", my.getUname());
+                view.getContext().startActivity(intent);
+                if(!is_uid_isbn && user.getUid().equals(my.getUid())) {
+                    ((Activity)view.getContext()).finish();
+                }
+            }
+        });
+
+        holder.pobook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), Shelf_ReviewlistActivity.class);
+                intent.putExtra("uid",my.getUid());
+                intent.putExtra("isbn",isbn);
+                intent.putExtra("bookname",my.getBook());
+                intent.putExtra("cover",my.getPostimg());
+                view.getContext().startActivity(intent);
+                if(is_uid_isbn && bookname.equals(my.getBook()) ) {
+                    ((Activity)view.getContext()).finish();
+                }
             }
         });
     }
@@ -173,6 +217,7 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.ViewHolder> 
 
         public ImageView popro;
         public TextView poname;
+        public TextView pobook;
         public RatingBar poratingbar;
         public TextView podate;
         public TextView pofavcount;
@@ -186,6 +231,7 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.ViewHolder> 
             mView = view;
             popro = (ImageView)view.findViewById(R.id.post_img);
             poname = (TextView)view.findViewById(R.id.post_name);
+            pobook = (TextView)view.findViewById(R.id.post_book);
             poratingbar = (RatingBar)view.findViewById(R.id.post_ratingbar);
             podate = (TextView)view.findViewById(R.id.post_date);
             pofavcount = (TextView)view.findViewById(R.id.post_favcount);

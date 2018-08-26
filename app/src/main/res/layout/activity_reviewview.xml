@@ -25,7 +25,7 @@
                     android:id="@+id/book_img"
                     android:layout_width="100dp"
                     android:layout_height="150dp"
-                    android:background="@drawable/mumani_background" />
+                    android:background="@drawable/png_mumani_background" />
 
                 <LinearLayout
                     android:layout_width="match_parent"

@@ -19,7 +19,7 @@
                 android:id="@+id/version_image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/mumani_background"
+                android:src="@drawable/png_mumani_background"
                 android:layout_weight="1"/>
 
             <LinearLayout
