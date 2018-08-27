@@ -201,7 +201,7 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.ViewHolder> 
                 intent.putExtra("bookname",my.getBook());
                 intent.putExtra("cover",my.getPostimg());
                 view.getContext().startActivity(intent);
-                if(is_uid_isbn && bookname.equals(my.getBook()) ) {
+                if(is_uid_isbn && isbn.equals(my.getIsbn()) ) {
                     ((Activity)view.getContext()).finish();
                 }
             }

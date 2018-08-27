@@ -4,6 +4,7 @@ public class Post_Item {
 
     private String uid;
     private String book;
+    private String isbn;
     private String profile;
     private String uname;
     private int star;
@@ -13,9 +14,10 @@ public class Post_Item {
     private String postimg;
     private String posttext;
 
-    public Post_Item(String uid, String book, String profile, String uname, int star, String date, boolean isfav, int favcount, String postimg, String posttext) {
+    public Post_Item(String uid, String book, String isbn, String profile, String uname, int star, String date, boolean isfav, int favcount, String postimg, String posttext) {
         this.uid = uid;
         this.book = book;
+        this.isbn = isbn;
         this.profile = profile;
         this.uname = uname;
         this.star = star;
@@ -40,6 +42,14 @@ public class Post_Item {
 
     public void setBook(String uid) {
         this.book = uid;
+    }
+
+    public String getIsbn() {
+        return isbn;
+    }
+
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
     }
 
     public String getProfile() {

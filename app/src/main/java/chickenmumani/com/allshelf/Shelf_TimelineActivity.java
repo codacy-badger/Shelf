@@ -137,7 +137,7 @@ public class Shelf_TimelineActivity extends AppCompatActivity {
                             Map<String,Object> mapUser = (Map<String,Object>) map.get("UserInfo");
                             Map<String,Object> mapFav = (Map<String,Object>) map.get("Good");
                             myList.add(new Post_Item(mapUser.get("uid").toString(), map.get("Book").toString(),
-                                    mapUser.get("proimg").toString(), mapUser.get("name").toString(),
+                                    map.get("ISBN").toString(), mapUser.get("proimg").toString(), mapUser.get("name").toString(),
                                     Integer.parseInt(map.get("Rate").toString()), map.get("Time").toString(),
                                     FALSE, Integer.parseInt(mapFav.get("Count").toString()),
                                     map.get("Image").toString(), map.get("Text").toString()
