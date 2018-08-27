@@ -115,7 +115,6 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.ViewHolder> 
                     Thread mThread = new Thread() {
                         @Override
                         public void run() {
-
                             try {
                                 URL url = new URL(urls);
 

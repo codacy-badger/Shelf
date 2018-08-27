@@ -8,6 +8,7 @@ import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -53,9 +54,10 @@ public class BookInfo_Activity extends AppCompatActivity {
 
     private String TTBKey = "ttbybson20100846003"; // Aladin Open API TTBKEY 값
     Bitmap bitmap;
-    private DatabaseReference mDatabase;
+    private DatabaseReference mDatabase, mDatabase2;
     private FirebaseAuth mAuth;
-    String isbn, bookname, coverurl;
+    String isbn, bookname, coverurl, num;
+    int reviewcheck;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +71,7 @@ public class BookInfo_Activity extends AppCompatActivity {
         final LinearLayout bookinfo_xxlin = (LinearLayout) findViewById(R.id.bookinfo_xxlin);
 
         mAuth = FirebaseAuth.getInstance();
+        reviewcheck = 0;
         final FirebaseUser user = mAuth.getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference("User_Book")
                 .child(user.getUid());
@@ -84,6 +87,25 @@ public class BookInfo_Activity extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError databaseError) {}
         });
+        mDatabase2 = FirebaseDatabase.getInstance()
+                .getReference("Review")
+                .child("User")
+                .child(user.getUid())
+                .child(ISBN13);
+        mDatabase2.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.getValue() != null) {
+                    reviewcheck = 1;
+                    ((Button) findViewById(R.id.bookinfo_writere)).setText("내 리뷰");
+                    num = dataSnapshot.getValue().toString();
+                }
+
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
+        });
+
 
         try{
             AsyncTask.execute(new Runnable() {
@@ -214,13 +236,21 @@ public class BookInfo_Activity extends AppCompatActivity {
         writer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(BookInfo_Activity.this, Review_WriteActivity.class);
-                intent.putExtra("uid",user.getUid());
-                intent.putExtra("isbn",isbn);
-                intent.putExtra("uname",user.getDisplayName());
-                intent.putExtra("cover",user.getPhotoUrl().toString());
-                startActivity(intent);
-                finish();
+                if(reviewcheck == 0) {
+                    Intent intent = new Intent(BookInfo_Activity.this, Review_WriteActivity.class);
+                    intent.putExtra("uid",user.getUid());
+                    intent.putExtra("isbn",isbn);
+                    intent.putExtra("uname",user.getDisplayName());
+                    intent.putExtra("cover",user.getPhotoUrl().toString());
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Intent intent = new Intent(BookInfo_Activity.this, Review_OneActivity.class);
+                    intent.putExtra("num", num);
+                    startActivity(intent);
+                    finish();
+                }
+
             }
         });
 
