@@ -104,7 +104,6 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.ViewHolder> 
             }
         });
 
-
         if(is_uid_isbn) {
             mDatabase = FirebaseDatabase.getInstance().getReference("User_Info")
                     .child(my.getUid()).child("Profile_Image");
@@ -205,6 +204,17 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.ViewHolder> 
                 }
             }
         });
+
+        holder.poisfav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!my.getIsfav()) {
+                    FirebaseDatabase.getInstance().getReference("Review").child("ReviewList").
+                            child(my.getKey()).child("Good").child(user.getUid()).setValue(user.getDisplayName());
+                    holder.poisfav.setImageResource(R.drawable.ic_favorite_orange_24dp);
+                }
+            }
+        });
     }
 
     @Override
@@ -220,7 +230,7 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.ViewHolder> 
         public RatingBar poratingbar;
         public TextView podate;
         public TextView pofavcount;
-        public ImageView poisfav;
+        public ImageButton poisfav;
         public ImageView poimg;
         public TextView porevtext;
         public ImageView pobutton;

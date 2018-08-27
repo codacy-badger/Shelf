@@ -44,14 +44,14 @@ public class Shelf_TimelineActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private DatabaseReference mDatabase ,mDatabase4;
+    private DatabaseReference mDatabase , mDatabase2, mDatabase4;
     private int count, allcount;
     String uname;
     Drawable upro;
     Thread mThread1;
     String urls;
     FirebaseUser user;
-    boolean following;
+    boolean following, isfav;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,7 +137,7 @@ public class Shelf_TimelineActivity extends AppCompatActivity {
                     }
                 });
                 for(String n : reviewlist) {
-                    DatabaseReference mDatabase2 = FirebaseDatabase.getInstance().getReference("Review")
+                    mDatabase2 = FirebaseDatabase.getInstance().getReference("Review")
                             .child("ReviewList").child(n);
                     ValueEventListener postListener2 = new ValueEventListener() {
                         @Override
@@ -145,12 +145,15 @@ public class Shelf_TimelineActivity extends AppCompatActivity {
                             Map<String,Object> map = (Map<String,Object>) dataSnapshot.getValue();
                             Map<String,Object> mapUser = (Map<String,Object>) map.get("UserInfo");
                             Map<String,Object> mapFav = (Map<String,Object>) map.get("Good");
-                            myList.add(new Post_Item(mapUser.get("uid").toString(), map.get("Book").toString(),
+                            if(dataSnapshot.child("Good").child(user.getUid()).getValue() != null) isfav = true;
+                            else isfav = false;
+                            myList.add(new Post_Item(dataSnapshot.getKey(), mapUser.get("uid").toString(), map.get("Book").toString(),
                                     map.get("ISBN").toString(), mapUser.get("proimg").toString(), mapUser.get("name").toString(),
                                     Integer.parseInt(map.get("Rate").toString()), map.get("Time").toString(),
-                                    FALSE, Integer.parseInt(mapFav.get("Count").toString()),
+                                    isfav, (int)dataSnapshot.child("Good").getChildrenCount()-1,
                                     map.get("Image").toString(), map.get("Text").toString()
                             ));
+                            mDatabase2.child("Good").child("Count").setValue((int)dataSnapshot.child("Good").getChildrenCount()-1);
                             count++;
                             if(allcount == count) {
                                 Collections.sort(myList,new TimingP());
@@ -162,7 +165,7 @@ public class Shelf_TimelineActivity extends AppCompatActivity {
                         public void onCancelled(DatabaseError databaseError) {
                         }
                     };
-                    mDatabase2.addListenerForSingleValueEvent(postListener2);
+                    mDatabase2.addValueEventListener(postListener2);
                 }
             }
         };
@@ -174,10 +177,8 @@ public class Shelf_TimelineActivity extends AppCompatActivity {
                 for(DataSnapshot ds : dataSnapshot.getChildren()) {
                     try {
                         reviewlist.add(ds.getValue().toString());
-                    } catch(Exception e) {
-                    }
+                    } catch(Exception e) {}
                 }
-
                 mThread.start();
             }
             @Override
@@ -209,32 +210,53 @@ public class Shelf_TimelineActivity extends AppCompatActivity {
                 public void onCancelled(DatabaseError databaseError) {}
             };
             mDatabase4.addListenerForSingleValueEvent(postListener4);
+            ((Button)findViewById(R.id.timeline_button)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(following == false) {
+                        mDatabase4.setValue(user.getDisplayName());
+                        FirebaseDatabase.getInstance().getReference("User_Friend").
+                                child("Follower").child(user.getUid()).child(uid).setValue(uname);
+                        ((Button)findViewById(R.id.timeline_button)).setText("팔로우 해제");
+                        ((Button)findViewById(R.id.timeline_button)).setBackgroundTintList
+                                (ContextCompat.getColorStateList(getApplicationContext(), android.R.color.white));
+                        ((Button)findViewById(R.id.timeline_button)).setTextColor(Color.BLACK);
+                        following = true;
+                    } else {
+                        mDatabase4.setValue(null);
+                        FirebaseDatabase.getInstance().getReference("User_Friend").
+                                child("Follower").child(user.getUid()).child(uid).setValue(null);
+                        ((Button)findViewById(R.id.timeline_button)).setText("팔로우");
+                        ((Button)findViewById(R.id.timeline_button)).setBackgroundTintList
+                                (ContextCompat.getColorStateList(getApplicationContext(), R.color.colorAccent));
+                        ((Button)findViewById(R.id.timeline_button)).setTextColor(Color.WHITE);
+                        following = false;
+                    }
+                }
+            });
         }
 
-        ((Button)findViewById(R.id.timeline_button)).setOnClickListener(new View.OnClickListener() {
+        ValueEventListener postListener5 = new ValueEventListener() {
             @Override
-            public void onClick(View view) {
-                if(following == false) {
-                    mDatabase4.setValue(user.getDisplayName());
-                    FirebaseDatabase.getInstance().getReference("User_Friend").
-                            child("Follower").child(user.getUid()).child(uid).setValue(uname);
-                    ((Button)findViewById(R.id.timeline_button)).setText("팔로우 해제");
-                    ((Button)findViewById(R.id.timeline_button)).setBackgroundTintList
-                            (ContextCompat.getColorStateList(getApplicationContext(), android.R.color.white));
-                    ((Button)findViewById(R.id.timeline_button)).setTextColor(Color.BLACK);
-                    following = true;
-                } else {
-                    mDatabase4.setValue(null);
-                    FirebaseDatabase.getInstance().getReference("User_Friend").
-                            child("Follower").child(user.getUid()).child(uid).setValue(null);
-                    ((Button)findViewById(R.id.timeline_button)).setText("팔로우");
-                    ((Button)findViewById(R.id.timeline_button)).setBackgroundTintList
-                            (ContextCompat.getColorStateList(getApplicationContext(), R.color.colorAccent));
-                    ((Button)findViewById(R.id.timeline_button)).setTextColor(Color.WHITE);
-                    following = false;
-                }
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                ((TextView)findViewById(R.id.timeline_followercount)).setText(String.valueOf(dataSnapshot.getChildrenCount()));
             }
-        });
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        };
+        FirebaseDatabase.getInstance().getReference("User_Friend").
+                child("Follower").child(uid).addValueEventListener(postListener5);
+
+        ValueEventListener postListener6 = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                ((TextView)findViewById(R.id.timeline_followingcount)).setText(String.valueOf(dataSnapshot.getChildrenCount()));
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        };
+        FirebaseDatabase.getInstance().getReference("User_Friend").
+                child("Following").child(uid).addValueEventListener(postListener6);
 
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);

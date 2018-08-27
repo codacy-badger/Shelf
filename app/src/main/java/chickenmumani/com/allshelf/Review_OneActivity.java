@@ -7,12 +7,18 @@ import android.graphics.drawable.shapes.OvalShape;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.PopupMenu;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,7 +32,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Map;
 
-import static java.lang.Boolean.FALSE;
 
 public class Review_OneActivity extends AppCompatActivity {
 
@@ -35,6 +40,8 @@ public class Review_OneActivity extends AppCompatActivity {
     private Bitmap bitmap;
     FirebaseStorage storage;
     StorageReference storageRef;
+    FirebaseUser user;
+    boolean isfav;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,24 +49,31 @@ public class Review_OneActivity extends AppCompatActivity {
         setContentView(R.layout.view_post);
         setTitle("");
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        user = FirebaseAuth.getInstance().getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference("Review")
                 .child("ReviewList").child(getIntent().getStringExtra("num"));
-        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Map<String,Object> map = (Map<String,Object>) dataSnapshot.getValue();
                 Map<String,Object> mapUser = (Map<String,Object>) map.get("UserInfo");
                 Map<String,Object> mapFav = (Map<String,Object>) map.get("Good");
-                p = new Post_Item(mapUser.get("uid").toString(), map.get("Book").toString(),
+                if(dataSnapshot.child("Good").child(user.getUid()).getValue() != null) isfav = true;
+                else isfav = false;
+                p = new Post_Item(dataSnapshot.getKey(), mapUser.get("uid").toString(), map.get("Book").toString(),
                         map.get("ISBN").toString(), mapUser.get("proimg").toString(), mapUser.get("name").toString(),
                         Integer.parseInt(map.get("Rate").toString()), map.get("Time").toString(),
-                        FALSE, Integer.parseInt(mapFav.get("Count").toString()),
+                        isfav, Integer.parseInt(mapFav.get("Count").toString()),
                         map.get("Image").toString(), map.get("Text").toString());
+                p.setFavcount((int)dataSnapshot.child("Good").getChildrenCount()-1);
+                mDatabase.child("Good").child("Count").setValue(p.getFavcount());
                 ((TextView)findViewById(R.id.post_name)).setText(p.getUname());
                 ((TextView)findViewById(R.id.post_book)).setText(p.getBook());
                 ((TextView)findViewById(R.id.post_date)).setText(p.getDate());
                 ((TextView)findViewById(R.id.post_favcount)).setText(String.valueOf(p.getFavcount()));
                 ((TextView)findViewById(R.id.post_revtext)).setText(p.getPosttext());
+                if(isfav) ((ImageButton)findViewById(R.id.post_isfav)).setImageResource(R.drawable.ic_favorite_orange_24dp);
+                else ((ImageButton)findViewById(R.id.post_isfav)).setImageResource(R.drawable.ic_favorite_gray_24dp);
                 Thread mThread = new Thread() {
                     @Override
                     public void run() {
@@ -98,6 +112,25 @@ public class Review_OneActivity extends AppCompatActivity {
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {}
+        });
+
+        ((ImageButton)findViewById(R.id.post_isfav)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!p.getIsfav()) {
+                    mDatabase.child("Good").child(user.getUid()).setValue(user.getDisplayName());
+                    ((ImageButton)findViewById(R.id.post_isfav)).setImageResource(R.drawable.ic_favorite_orange_24dp);
+                }
+            }
+        });
+
+        ((ImageButton)findViewById(R.id.post_button)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v){
+                Log.d("w", "clicked");
+                PopupMenu popup = new PopupMenu(Review_OneActivity.this, v);
+                popup.inflate(R.menu.post_menu2);
+            }
         });
     }
 

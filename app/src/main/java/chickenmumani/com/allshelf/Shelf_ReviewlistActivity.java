@@ -18,6 +18,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -43,9 +45,9 @@ public class Shelf_ReviewlistActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
     private int count, allcount, sumrate;
     String uname, bookname, isbn, coverurl;
-    Drawable upro;
     Thread mThread1;
-    String urls;
+    boolean isfav;
+    FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +59,7 @@ public class Shelf_ReviewlistActivity extends AppCompatActivity {
         bookname = intent.getStringExtra("bookname");
         isbn = intent.getStringExtra("isbn");
         coverurl = intent.getStringExtra("cover");
+        user = FirebaseAuth.getInstance().getCurrentUser();
 
         ((TextView)findViewById(R.id.reviewlist_name)).setText(bookname);
         setTitle(bookname);
@@ -128,10 +131,12 @@ public class Shelf_ReviewlistActivity extends AppCompatActivity {
                             Map<String,Object> map = (Map<String,Object>) dataSnapshot.getValue();
                             Map<String,Object> mapUser = (Map<String,Object>) map.get("UserInfo");
                             Map<String,Object> mapFav = (Map<String,Object>) map.get("Good");
-                            myList.add(new Post_Item(mapUser.get("uid").toString(), map.get("Book").toString(),
+                            if(dataSnapshot.child("Good").child(user.getUid()).getValue() != null) isfav = true;
+                            else isfav = false;
+                            myList.add(new Post_Item(dataSnapshot.getKey(), mapUser.get("uid").toString(), map.get("Book").toString(),
                                     map.get("ISBN").toString(), mapUser.get("proimg").toString(), mapUser.get("name").toString(),
                                     Integer.parseInt(map.get("Rate").toString()), map.get("Time").toString(),
-                                    FALSE, Integer.parseInt(mapFav.get("Count").toString()),
+                                    isfav, Integer.parseInt(mapFav.get("Count").toString()),
                                     map.get("Image").toString(), map.get("Text").toString()
                             ));
                             sumrate += Integer.parseInt(map.get("Rate").toString());
@@ -149,7 +154,7 @@ public class Shelf_ReviewlistActivity extends AppCompatActivity {
                         public void onCancelled(DatabaseError databaseError) {
                         }
                     };
-                    mDatabase2.addListenerForSingleValueEvent(postListener2);
+                    mDatabase2.addValueEventListener(postListener2);
                 }
             }
         };
