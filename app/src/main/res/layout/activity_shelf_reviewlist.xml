@@ -91,7 +91,8 @@
                         android:id="@+id/reviewlist_button"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:backgroundTint="#ffffff"
+                        android:backgroundTint="@color/colorAccent"
+                        android:textColor="#ffffff"
                         android:minHeight="0dp"
                         android:text="책 정보 보기"/>
 

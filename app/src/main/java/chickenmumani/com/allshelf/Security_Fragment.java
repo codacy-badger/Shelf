@@ -104,6 +104,16 @@ public class Security_Fragment extends Fragment {
             }
         });
 
+        LinearLayout d = (LinearLayout) v.findViewById(R.id.lin_versionb);
+        d.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                Intent intent = new Intent(getActivity(), Version_Activity.class);
+                startActivity(intent);
+            }
+        });
+
         return v;
     }
 

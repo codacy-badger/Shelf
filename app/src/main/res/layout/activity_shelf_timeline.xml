@@ -115,9 +115,10 @@
                         android:id="@+id/timeline_button"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:backgroundTint="#ffffff"
+                        android:backgroundTint="@color/colorAccent"
+                        android:textColor="#ffffff"
                         android:minHeight="0dp"
-                        android:text="팔로우 / 팔로우 해제 / invisible"/>
+                        android:text="팔로우"/>
 
 
                 </LinearLayout>

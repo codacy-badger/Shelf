@@ -3,10 +3,12 @@ package chickenmumani.com.allshelf;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.provider.ContactsContract;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
@@ -14,9 +16,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -38,12 +44,14 @@ public class Shelf_TimelineActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private DatabaseReference mDatabase;
+    private DatabaseReference mDatabase ,mDatabase4;
     private int count, allcount;
     String uname;
     Drawable upro;
     Thread mThread1;
     String urls;
+    FirebaseUser user;
+    boolean following;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +63,7 @@ public class Shelf_TimelineActivity extends AppCompatActivity {
         final String uid = intent.getStringExtra("uid");
         uname = intent.getStringExtra("uname");
         setTitle(uname);
+        user = FirebaseAuth.getInstance().getCurrentUser();
 
         final ImageView proimg = (ImageView) findViewById(R.id.timeline_img);
         TextView nameT = (TextView) findViewById(R.id.timeline_name);
@@ -175,8 +184,57 @@ public class Shelf_TimelineActivity extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
             }
         };
-
         mDatabase.addListenerForSingleValueEvent(postListener3);
+
+        if(user.getUid().equals(uid)) {
+            ((Button)findViewById(R.id.timeline_button)).setClickable(false);
+            ((Button)findViewById(R.id.timeline_button)).setBackgroundTintList
+                    (ContextCompat.getColorStateList(getApplicationContext(), android.R.color.darker_gray));
+            ((Button)findViewById(R.id.timeline_button)).setTextColor(Color.BLACK);
+        } else {
+            mDatabase4 = FirebaseDatabase.getInstance().getReference("User_Friend").
+                    child("Following").child(uid).child(user.getUid());
+            ValueEventListener postListener4 = new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if(dataSnapshot.getValue() != null) {
+                        ((Button)findViewById(R.id.timeline_button)).setText("팔로우 해제");
+                        ((Button)findViewById(R.id.timeline_button)).setBackgroundTintList
+                                (ContextCompat.getColorStateList(getApplicationContext(), android.R.color.white));
+                        ((Button)findViewById(R.id.timeline_button)).setTextColor(Color.BLACK);
+                        following = true;
+                    } else following = false;
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {}
+            };
+            mDatabase4.addListenerForSingleValueEvent(postListener4);
+        }
+
+        ((Button)findViewById(R.id.timeline_button)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(following == false) {
+                    mDatabase4.setValue(user.getDisplayName());
+                    FirebaseDatabase.getInstance().getReference("User_Friend").
+                            child("Follower").child(user.getUid()).child(uid).setValue(uname);
+                    ((Button)findViewById(R.id.timeline_button)).setText("팔로우 해제");
+                    ((Button)findViewById(R.id.timeline_button)).setBackgroundTintList
+                            (ContextCompat.getColorStateList(getApplicationContext(), android.R.color.white));
+                    ((Button)findViewById(R.id.timeline_button)).setTextColor(Color.BLACK);
+                    following = true;
+                } else {
+                    mDatabase4.setValue(null);
+                    FirebaseDatabase.getInstance().getReference("User_Friend").
+                            child("Follower").child(user.getUid()).child(uid).setValue(null);
+                    ((Button)findViewById(R.id.timeline_button)).setText("팔로우");
+                    ((Button)findViewById(R.id.timeline_button)).setBackgroundTintList
+                            (ContextCompat.getColorStateList(getApplicationContext(), R.color.colorAccent));
+                    ((Button)findViewById(R.id.timeline_button)).setTextColor(Color.WHITE);
+                    following = false;
+                }
+            }
+        });
 
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);

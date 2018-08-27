@@ -156,11 +156,6 @@ public class Navi_Activity extends AppCompatActivity
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.content_frame, new Notice_Fragment())
                     .commit();
-            //for (Fragment fragment : getSupportFragmentManager().getFragments() ) {Log.d("1", "found"); getSupportFragmentManager().beginTransaction().remove(fragment).commit();}
-        } else if (id == R.id.nav_version) {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.content_frame, new Version_Fragment())
-                    .commit();
         } else if (id == R.id.nav_security) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.content_frame, new Security_Fragment())
