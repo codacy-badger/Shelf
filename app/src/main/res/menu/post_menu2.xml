@@ -2,9 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_report"
-        android:orderInCategory="100"
+        android:id="@+id/action_edit"
         android:title="수정"
-        app:showAsAction="never" />
+        app:showAsAction="ifRoom" />
 
 </menu>

@@ -1,5 +1,7 @@
 package chickenmumani.com.allshelf;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.ShapeDrawable;
@@ -7,6 +9,7 @@ import android.graphics.drawable.shapes.OvalShape;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.PopupMenu;
 import android.util.Log;
 import android.view.MenuItem;
@@ -127,9 +130,25 @@ public class Review_OneActivity extends AppCompatActivity {
         ((ImageButton)findViewById(R.id.post_button)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
-                Log.d("w", "clicked");
-                PopupMenu popup = new PopupMenu(Review_OneActivity.this, v);
-                popup.inflate(R.menu.post_menu2);
+                Context wrapper = new ContextThemeWrapper(getApplicationContext(), R.style.MyPopupMenu);
+                PopupMenu popup = new PopupMenu(wrapper, v);
+                if(p.getUid().equals(user.getUid())) getMenuInflater().inflate(R.menu.post_menu2, popup.getMenu());
+                else getMenuInflater().inflate(R.menu.post_menu1, popup.getMenu());
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        if(item.getItemId() == R.id.action_edit) {
+                            Intent intent = new Intent(Review_OneActivity.this, Review_EditActivity.class);
+                            intent.putExtra("num", p.getKey());
+                            startActivity(intent);
+                        } else if(item.getItemId() == R.id.action_report) {
+                            Intent intent = new Intent(Review_OneActivity.this, Report_Activity.class);
+                            startActivity(intent);
+                        }
+                        return false;
+                    }
+                } );
+                popup.show();
             }
         });
     }
