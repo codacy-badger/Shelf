@@ -194,7 +194,6 @@ public class Review_WriteActivity extends AppCompatActivity {
                                 tdata.child("UserInfo").child("name").setValue(uname);
                                 tdata.child("UserInfo").child("uid").setValue(uid);
                                 tdata.child("UserInfo").child("proimg").setValue(proimg);
-                                Log.d("w","proimg : " + proimg);
                                 tdata.child("Time").setValue(getTime);
 
                                 mDatabase.child("Review").child("Book").child(isbn).child(uid).setValue(reviewcount);

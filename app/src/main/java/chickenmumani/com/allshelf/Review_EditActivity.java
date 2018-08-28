@@ -53,6 +53,7 @@ public class Review_EditActivity extends AppCompatActivity {
     Uri selectedImage;
     Bitmap photo;
     int reviewcount, cancomment, openrange;
+    String num;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,21 +61,29 @@ public class Review_EditActivity extends AppCompatActivity {
         setContentView(R.layout.activity_review_edit);
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle("리뷰 수정");
+        num = getIntent().getStringExtra("num");
         mDatabase = FirebaseDatabase.getInstance().getReference("Review")
-                .child("ReviewList").child(getIntent().getStringExtra("num"));
+                .child("ReviewList").child(num);
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 ((EditText)findViewById(R.id.ededit)).setText(dataSnapshot.child("Text").getValue().toString());
                 ((RatingBar)findViewById(R.id.ed_ratingbar)).setNumStars(Integer.parseInt(dataSnapshot.child("Rate").getValue().toString()));
-                if(dataSnapshot.child("OpenRange").getValue().toString().equals("1"))
+                if(dataSnapshot.child("OpenRange").getValue().toString().equals("1")) {
                     ((RadioGroup)findViewById(R.id.ed_radopen)).check(R.id.ed_radopenall);
-                else ((RadioGroup)findViewById(R.id.ed_radopen)).check(R.id.ed_radopenno);
+                    openrange = 1;
+                } else {
+                    ((RadioGroup)findViewById(R.id.ed_radopen)).check(R.id.ed_radopenno);
+                    openrange = 0;
+                }
 
-                if(dataSnapshot.child("Comment").child("CanComment").getValue().toString().equals("1"))
+                if(dataSnapshot.child("Comment").child("CanComment").getValue().toString().equals("1")) {
                     ((RadioGroup)findViewById(R.id.ed_radcom)).check(R.id.ed_radcomyes);
-                else ((RadioGroup)findViewById(R.id.ed_radcom)).check(R.id.ed_radcomno);
-
+                    cancomment = 1;
+                } else {
+                    ((RadioGroup)findViewById(R.id.ed_radcom)).check(R.id.ed_radcomno);
+                    cancomment = 0;
+                }
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {}
@@ -87,6 +96,36 @@ public class Review_EditActivity extends AppCompatActivity {
                 Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
                 photoPickerIntent.setType("image/*");
                 startActivityForResult(photoPickerIntent, RESULT_LOAD_IMG);
+            }
+        });
+
+        RadioGroup group1=(RadioGroup)findViewById(R.id.ed_radopen);
+        group1.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                switch (i){
+                    case R.id.ed_radopenall:
+                        cancomment = 1;
+                        break;
+                    case R.id.ed_radopenno:
+                        cancomment = 0;
+                        break;
+                }
+            }
+        });
+
+        RadioGroup group2=(RadioGroup)findViewById(R.id.ed_radcom);
+        group1.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                switch (i){
+                    case R.id.ed_radcomyes:
+                        openrange = 1;
+                        break;
+                    case R.id.ed_radcomno:
+                        openrange = 0;
+                        break;
+                }
             }
         });
     }
@@ -114,6 +153,11 @@ public class Review_EditActivity extends AppCompatActivity {
                     dialog.show();
                     return true;
                 }
+                mDatabase.child("Text").setValue(((EditText)findViewById(R.id.ededit)).getText().toString());
+                mDatabase.child("Comment").child("CanComment").setValue(cancomment);
+                mDatabase.child("OpenRange").setValue(openrange);
+                mDatabase.child("Rate").setValue(((RatingBar)findViewById(R.id.ed_ratingbar)).getNumStars());
+
                 if(photo != null) {
                     final ProgressDialog dialogr = ProgressDialog.show(Review_EditActivity.this, "",
                             "Loading... Please wait");
@@ -138,10 +182,18 @@ public class Review_EditActivity extends AppCompatActivity {
                     }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            // 추가해야함^^
-
+                            dialogr.dismiss();
+                            Intent intent = new Intent(Review_EditActivity.this, Review_OneActivity.class);
+                            intent.putExtra("num", num);
+                            startActivity(intent);
+                            Review_EditActivity.this.finish();
                         }
                     });
+                } else {
+                    Intent intent = new Intent(Review_EditActivity.this, Review_OneActivity.class);
+                    intent.putExtra("num", num);
+                    startActivity(intent);
+                    Review_EditActivity.this.finish();
                 }
             }
             default:
