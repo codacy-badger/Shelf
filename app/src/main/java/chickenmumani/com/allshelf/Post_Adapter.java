@@ -236,7 +236,7 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.ViewHolder> 
                             Intent intent = new Intent(mView.getContext(), Report_Activity.class);
                             intent.putExtra("num", my.getKey());
                             intent.putExtra("post_type", "review");
-                            intent.putExtra("uid", my.getUid());
+                            intent.putExtra("uid", user.getUid());
                             ((Activity)mView.getContext()).startActivity(intent);
                         }
                         return false;

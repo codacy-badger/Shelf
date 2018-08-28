@@ -59,6 +59,7 @@
     </RadioGroup>
 
     <EditText
+        android:id="@+id/rep_edit"
         android:layout_width="match_parent"
         android:background="@drawable/all_edge"
         android:layout_margin="10dp"
