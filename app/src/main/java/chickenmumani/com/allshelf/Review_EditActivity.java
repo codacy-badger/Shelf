@@ -24,6 +24,8 @@ import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -44,16 +46,16 @@ import java.util.Locale;
 public class Review_EditActivity extends AppCompatActivity {
 
     private DatabaseReference mDatabase;
-    String isbn, uid, uname, proimg;
+    String isbn, uid, uname, proimg, num;
     final int RESULT_LOAD_IMG = 5;
     final int CROP_FROM_CAMERA = 6;
     FirebaseStorage storage;
     StorageReference storageRef;
     RatingBar ratingbar;
     Uri selectedImage;
+    FirebaseUser user;
     Bitmap photo;
     int reviewcount, cancomment, openrange;
-    String num;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,11 +64,15 @@ public class Review_EditActivity extends AppCompatActivity {
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle("리뷰 수정");
         num = getIntent().getStringExtra("num");
+        user = FirebaseAuth.getInstance().getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference("Review")
                 .child("ReviewList").child(num);
+        storage = FirebaseStorage.getInstance();
+        storageRef = storage.getReference();
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                isbn = dataSnapshot.child("ISBN").getValue().toString();
                 ((EditText)findViewById(R.id.ededit)).setText(dataSnapshot.child("Text").getValue().toString());
                 ((RatingBar)findViewById(R.id.ed_ratingbar)).setNumStars(Integer.parseInt(dataSnapshot.child("Rate").getValue().toString()));
                 if(dataSnapshot.child("OpenRange").getValue().toString().equals("1")) {
@@ -115,7 +121,7 @@ public class Review_EditActivity extends AppCompatActivity {
         });
 
         RadioGroup group2=(RadioGroup)findViewById(R.id.ed_radcom);
-        group1.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        group2.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 switch (i){
@@ -162,7 +168,7 @@ public class Review_EditActivity extends AppCompatActivity {
                     final ProgressDialog dialogr = ProgressDialog.show(Review_EditActivity.this, "",
                             "Loading... Please wait");
 
-                    StorageReference ImagesRef = storageRef.child("Review_Image/"+isbn +"_"+ uid +".jpg");
+                    StorageReference ImagesRef = storageRef.child("Review_Image/"+isbn +"_"+ user.getUid() +".jpg");
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     photo.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                     byte[] data = baos.toByteArray();

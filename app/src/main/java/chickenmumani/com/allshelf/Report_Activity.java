@@ -5,15 +5,54 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
+import android.widget.RadioGroup;
 
 import chickenmumani.com.allshelf.R;
 
 public class Report_Activity extends AppCompatActivity {
 
+    String num, post_type, uid;
+    int why = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report);
+        Intent intent = getIntent();
+        num = intent.getStringExtra("num");
+        post_type = intent.getStringExtra("post_type");
+        uid = intent.getStringExtra("uid");
+        ((RadioGroup)findViewById(R.id.rep_group)).setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                switch (i){
+                    case R.id.rep1:
+                        why = 1;
+                        break;
+                    case R.id.rep2:
+                        why = 2;
+                        break;
+                    case R.id.rep3:
+                        why = 3;
+                        break;
+                    case R.id.rep4:
+                        why = 4;
+                        break;
+                    case R.id.rep5:
+                        why = 5;
+                        break;
+
+                }
+            }
+        });
+
+        ((Button)findViewById(R.id.report_com)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
     }
 
     @Override

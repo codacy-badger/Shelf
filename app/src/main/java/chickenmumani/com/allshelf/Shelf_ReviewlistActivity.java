@@ -133,12 +133,16 @@ public class Shelf_ReviewlistActivity extends AppCompatActivity {
                             Map<String,Object> mapFav = (Map<String,Object>) map.get("Good");
                             if(dataSnapshot.child("Good").child(user.getUid()).getValue() != null) isfav = true;
                             else isfav = false;
-                            myList.add(new Post_Item(dataSnapshot.getKey(), mapUser.get("uid").toString(), map.get("Book").toString(),
-                                    map.get("ISBN").toString(), mapUser.get("proimg").toString(), mapUser.get("name").toString(),
-                                    Integer.parseInt(map.get("Rate").toString()), map.get("Time").toString(),
-                                    isfav, Integer.parseInt(mapFav.get("Count").toString()),
-                                    map.get("Image").toString(), map.get("Text").toString()
-                            ));
+                            if(mapUser.get("uid").toString().equals(user.getUid())
+                                    || (map.get("OpenRange").toString().equals("1")) && Integer.parseInt(map.get("OpenRange").toString()) <= 4)  {
+                                myList.add(new Post_Item(dataSnapshot.getKey(), mapUser.get("uid").toString(), map.get("Book").toString(),
+                                        map.get("ISBN").toString(), mapUser.get("proimg").toString(), mapUser.get("name").toString(),
+                                        Integer.parseInt(map.get("Rate").toString()), map.get("Time").toString(),
+                                        isfav, Integer.parseInt(mapFav.get("Count").toString()),
+                                        map.get("Image").toString(), map.get("Text").toString()
+                                ));
+                            }
+
                             sumrate += Integer.parseInt(map.get("Rate").toString());
                             count++;
                             if(allcount == count) {

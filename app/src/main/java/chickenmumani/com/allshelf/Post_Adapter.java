@@ -9,10 +9,12 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.support.annotation.NonNull;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -213,6 +215,34 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.ViewHolder> 
                             child(my.getKey()).child("Good").child(user.getUid()).setValue(user.getDisplayName());
                     holder.poisfav.setImageResource(R.drawable.ic_favorite_orange_24dp);
                 }
+            }
+        });
+
+        holder.pobutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v){
+                Context wrapper = new ContextThemeWrapper(v.getContext().getApplicationContext(), R.style.MyPopupMenu);
+                PopupMenu popup = new PopupMenu(wrapper, v);
+                if(my.getUid().equals(user.getUid())) ((Activity)v.getContext()).getMenuInflater().inflate(R.menu.post_menu2, popup.getMenu());
+                else ((Activity)v.getContext()).getMenuInflater().inflate(R.menu.post_menu1, popup.getMenu());
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        if(item.getItemId() == R.id.action_edit) {
+                            Intent intent = new Intent(mView.getContext(), Review_EditActivity.class);
+                            intent.putExtra("num", my.getKey());
+                            ((Activity)mView.getContext()).startActivity(intent);
+                        } else if(item.getItemId() == R.id.action_report) {
+                            Intent intent = new Intent(mView.getContext(), Report_Activity.class);
+                            intent.putExtra("num", my.getKey());
+                            intent.putExtra("post_type", "review");
+                            intent.putExtra("uid", my.getUid());
+                            ((Activity)mView.getContext()).startActivity(intent);
+                        }
+                        return false;
+                    }
+                } );
+                popup.show();
             }
         });
     }

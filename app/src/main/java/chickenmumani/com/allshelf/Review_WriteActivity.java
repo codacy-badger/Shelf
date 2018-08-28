@@ -102,7 +102,7 @@ public class Review_WriteActivity extends AppCompatActivity {
         });
 
         RadioGroup group2=(RadioGroup)findViewById(R.id.writere_radcom);
-        group1.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        group2.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 switch (i){
@@ -202,8 +202,10 @@ public class Review_WriteActivity extends AppCompatActivity {
                                 mDatabase.child("User_Info").child(uid).child("Profile_Image").setValue(proimg);
 
                                 dialogr.dismiss();
+                                Intent intent = new Intent(Review_WriteActivity.this, Review_OneActivity.class);
+                                intent.putExtra("num", String.valueOf(reviewcount));
+                                startActivity(intent);
                                 Review_WriteActivity.this.finish();
-
                                 return Transaction.success(mutableData);
                             }
 

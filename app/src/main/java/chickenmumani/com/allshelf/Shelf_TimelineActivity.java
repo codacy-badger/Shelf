@@ -1,5 +1,6 @@
 package chickenmumani.com.allshelf;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,13 +12,16 @@ import android.provider.ContactsContract;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -139,7 +143,7 @@ public class Shelf_TimelineActivity extends AppCompatActivity {
                 for(String n : reviewlist) {
                     mDatabase2 = FirebaseDatabase.getInstance().getReference("Review")
                             .child("ReviewList").child(n);
-                    ValueEventListener postListener2 = new ValueEventListener() {
+                    mDatabase2.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             Map<String,Object> map = (Map<String,Object>) dataSnapshot.getValue();
@@ -147,16 +151,22 @@ public class Shelf_TimelineActivity extends AppCompatActivity {
                             Map<String,Object> mapFav = (Map<String,Object>) map.get("Good");
                             if(dataSnapshot.child("Good").child(user.getUid()).getValue() != null) isfav = true;
                             else isfav = false;
-                            myList.add(new Post_Item(dataSnapshot.getKey(), mapUser.get("uid").toString(), map.get("Book").toString(),
-                                    map.get("ISBN").toString(), mapUser.get("proimg").toString(), mapUser.get("name").toString(),
-                                    Integer.parseInt(map.get("Rate").toString()), map.get("Time").toString(),
-                                    isfav, (int)dataSnapshot.child("Good").getChildrenCount()-1,
-                                    map.get("Image").toString(), map.get("Text").toString()
-                            ));
-                            mDatabase2.child("Good").child("Count").setValue((int)dataSnapshot.child("Good").getChildrenCount()-1);
+                            if(dataSnapshot.child(uid).equals(user.getUid())
+                                    || (map.get("OpenRange").toString().equals("1")) && Integer.parseInt(map.get("OpenRange").toString()) <= 4)  {
+                                myList.add(new Post_Item(dataSnapshot.getKey(), mapUser.get("uid").toString(), map.get("Book").toString(),
+                                        map.get("ISBN").toString(), mapUser.get("proimg").toString(), mapUser.get("name").toString(),
+                                        Integer.parseInt(map.get("Rate").toString()), map.get("Time").toString(),
+                                        isfav, (int)dataSnapshot.child("Good").getChildrenCount()-1,
+                                        map.get("Image").toString(), map.get("Text").toString()
+                                ));
+                                mDatabase2.child("Good").child("Count").setValue((int)dataSnapshot.child("Good").getChildrenCount()-1);
+                            }
                             count++;
                             if(allcount == count) {
                                 Collections.sort(myList,new TimingP());
+                                try {
+                                    mThread1.join();
+                                } catch (InterruptedException e) {}
                                 mAdapter = new Post_Adapter(myList, uid, uname, upro);
                                 mRecyclerView.setAdapter(mAdapter);
                             }
@@ -164,8 +174,7 @@ public class Shelf_TimelineActivity extends AppCompatActivity {
                         @Override
                         public void onCancelled(DatabaseError databaseError) {
                         }
-                    };
-                    mDatabase2.addValueEventListener(postListener2);
+                    });
                 }
             }
         };

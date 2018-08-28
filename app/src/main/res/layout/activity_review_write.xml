@@ -52,6 +52,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
+                    android:singleLine = "true"
                     android:layout_toLeftOf="@id/writere_editbutton"
                     android:gravity="center_vertical"
                     android:text="사진을 추가해주세요" />
