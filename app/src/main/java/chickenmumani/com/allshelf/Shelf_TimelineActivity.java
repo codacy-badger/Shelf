@@ -270,6 +270,25 @@ public class Shelf_TimelineActivity extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
+        ((TextView)findViewById(R.id.timeline_followercount)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Shelf_TimelineActivity.this, Friend_ListActivity.class);
+                intent.putExtra("fol", "follower");
+                intent.putExtra("uid", uid);
+                startActivity(intent);
+            }
+        });
+
+        ((TextView)findViewById(R.id.timeline_followingcount)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Shelf_TimelineActivity.this, Friend_ListActivity.class);
+                intent.putExtra("fol", "following");
+                intent.putExtra("uid", uid);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override

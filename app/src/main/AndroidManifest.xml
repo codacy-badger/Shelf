@@ -59,7 +59,8 @@
         <activity android:name=".Shelf_ReviewlistActivity" />
         <activity android:name=".Review_OneActivity" />
         <activity android:name=".Version_Activity" />
-        <activity android:name=".Review_EditActivity"></activity>
+        <activity android:name=".Review_EditActivity" />
+        <activity android:name=".Friend_ListActivity"></activity>
     </application>
 
 </manifest>
