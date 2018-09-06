@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="#ffffff"
     tools:context="chickenmumani.com.allshelf.Search_Activity">
 
     <RelativeLayout
@@ -27,9 +28,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
+            android:backgroundTint="#ffffff"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="10dp"
-            android:src="@drawable/ic_search_black_24dp"/>
+            android:src="@drawable/ic_search_orange_24dp"/>
     </RelativeLayout>
 
     <View

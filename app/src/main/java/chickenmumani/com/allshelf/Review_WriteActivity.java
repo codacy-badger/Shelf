@@ -21,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.RadioGroup;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -50,7 +51,7 @@ import chickenmumani.com.allshelf.R;
 public class Review_WriteActivity extends AppCompatActivity {
 
     private DatabaseReference mDatabase;
-    String isbn, uid, uname, proimg;
+    String bookname, isbn, uid, uname, proimg;
     final int RESULT_LOAD_IMG = 5;
     final int CROP_FROM_CAMERA = 6;
     FirebaseStorage storage;
@@ -59,6 +60,7 @@ public class Review_WriteActivity extends AppCompatActivity {
     Uri selectedImage;
     Bitmap photo;
     int reviewcount, cancomment = 1, openrange = 1;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +68,10 @@ public class Review_WriteActivity extends AppCompatActivity {
         setContentView(R.layout.activity_review_write);
         setTitle("리뷰 쓰기");
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        progressBar = (ProgressBar)findViewById(R.id.review_write_progressbar);
+        progressBar.setVisibility(View.INVISIBLE);
         Intent intent = getIntent();
+        bookname = intent.getStringExtra("bookname");
         isbn = intent.getStringExtra("isbn");
         uid = intent.getStringExtra("uid");
         uname = intent.getStringExtra("uname");
@@ -144,8 +149,7 @@ public class Review_WriteActivity extends AppCompatActivity {
                     return true;
                 }
 
-                final ProgressDialog dialogr = ProgressDialog.show(Review_WriteActivity.this, "",
-                        "Loading... Please wait");
+                progressBar.setVisibility(View.VISIBLE);
 
                 StorageReference ImagesRef = storageRef.child("Review_Image/"+isbn +"_"+ uid +".jpg");
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -156,7 +160,7 @@ public class Review_WriteActivity extends AppCompatActivity {
                 uploadTask.addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception exception) {
-                        dialogr.dismiss();
+                        progressBar.setVisibility(View.INVISIBLE);
                         AlertDialog.Builder builder = new AlertDialog.Builder(Review_WriteActivity.this);
                         builder .setMessage("이미지 업로드에 실패했습니다. 네트워크 연결을 확인해주세요.")
                                 .setCancelable(false)
@@ -184,6 +188,7 @@ public class Review_WriteActivity extends AppCompatActivity {
                                 String getTime = sdf.format(date);
                                 DatabaseReference tdata = mDatabase.child("Review").child("ReviewList").child(String.valueOf(reviewcount));
                                 tdata.child("Blinded").setValue(0);
+                                tdata.child("Book").setValue(bookname);
                                 tdata.child("Comment").child("CanComment").setValue(cancomment);
                                 tdata.child("Good").child("Count").setValue(0);
                                 tdata.child("ISBN").setValue(isbn);
@@ -201,7 +206,7 @@ public class Review_WriteActivity extends AppCompatActivity {
 
                                 mDatabase.child("User_Info").child(uid).child("Profile_Image").setValue(proimg);
 
-                                dialogr.dismiss();
+
                                 Intent intent = new Intent(Review_WriteActivity.this, Review_OneActivity.class);
                                 intent.putExtra("num", String.valueOf(reviewcount));
                                 startActivity(intent);
@@ -214,9 +219,9 @@ public class Review_WriteActivity extends AppCompatActivity {
                                 Log.d("w", "postTransaction:onComplete:" + databaseError);
                             }
                         });
-
                     }
                 });
+                progressBar.setVisibility(View.INVISIBLE);
                 return true;
             }
             default:

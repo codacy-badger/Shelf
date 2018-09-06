@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +28,7 @@ public class Notice_ContentActivity extends AppCompatActivity {
 
     private DatabaseReference mDatabase;
     private StorageReference mStorageRef;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +38,8 @@ public class Notice_ContentActivity extends AppCompatActivity {
         setTitle("공지사항");
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        final ProgressDialog dialog = ProgressDialog.show(Notice_ContentActivity.this, "",
-                "Loading... Please wait");          // 프로그레스다이얼로그 생성
+        progressBar = (ProgressBar)findViewById(R.id.noticeProgressBar);
+        progressBar.setVisibility(View.VISIBLE);
 
         TextView title = (TextView) findViewById(R.id.noticeview_title);
         TextView date = (TextView) findViewById(R.id.noticeview_date);
@@ -57,14 +60,14 @@ public class Notice_ContentActivity extends AppCompatActivity {
             public void onSuccess(byte[] bytes) {
                 String str2 = new String(bytes);
                 content.setText(str2);
-                dialog.dismiss();       // 프로그레스다이얼로그 삭제
+                progressBar.setVisibility(View.INVISIBLE);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
                 Log.e("m","Storage Failed");
+                progressBar.setVisibility(View.INVISIBLE);
                 // Handle any errors
-                dialog.dismiss();
             }
         });
 

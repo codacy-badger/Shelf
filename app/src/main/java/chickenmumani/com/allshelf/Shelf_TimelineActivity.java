@@ -9,7 +9,13 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.provider.ContactsContract;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.view.ContextThemeWrapper;
@@ -39,6 +45,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 
 import static java.lang.Boolean.FALSE;
@@ -49,6 +56,7 @@ public class Shelf_TimelineActivity extends AppCompatActivity {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private DatabaseReference mDatabase , mDatabase2, mDatabase4;
+    private ViewPager mViewPager;
     private int count, allcount;
     String uname;
     Drawable upro;
@@ -62,6 +70,10 @@ public class Shelf_TimelineActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shelf_timeline);
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        mViewPager = (ViewPager)findViewById(R.id.timeline_container);
+        mViewPager.setAdapter(new pagerAdapter(getSupportFragmentManager()));
+        mViewPager.setCurrentItem(0);
 
         Intent intent = getIntent();
         final String uid = intent.getStringExtra("uid");
@@ -113,11 +125,12 @@ public class Shelf_TimelineActivity extends AppCompatActivity {
         };
         mDatabase.addListenerForSingleValueEvent(postListener);
 
+        /*
         mRecyclerView = (RecyclerView) findViewById(R.id.timeline_recyclerview);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(Shelf_TimelineActivity.this, DividerItemDecoration.VERTICAL));
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setNestedScrollingEnabled(false);
-
+        */
         final ArrayList<Post_Item> myList = new ArrayList<Post_Item>();
 
         mDatabase = FirebaseDatabase.getInstance().getReference("Review")
@@ -168,7 +181,7 @@ public class Shelf_TimelineActivity extends AppCompatActivity {
                                     mThread1.join();
                                 } catch (InterruptedException e) {}
                                 mAdapter = new Post_Adapter(myList, uid, uname, upro);
-                                mRecyclerView.setAdapter(mAdapter);
+                                //mRecyclerView.setAdapter(mAdapter);
                             }
                         }
                         @Override
@@ -268,7 +281,7 @@ public class Shelf_TimelineActivity extends AppCompatActivity {
                 child("Following").child(uid).addValueEventListener(postListener6);
 
         mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        //mRecyclerView.setLayoutManager(mLayoutManager);
 
         ((TextView)findViewById(R.id.timeline_followercount)).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -308,5 +321,31 @@ public class Shelf_TimelineActivity extends AppCompatActivity {
             return o2.getDate().compareTo(o1.getDate());
         }
 
+    }
+
+    private class pagerAdapter extends FragmentStatePagerAdapter
+    {
+        public pagerAdapter(android.support.v4.app.FragmentManager fm)
+        {
+            super(fm);
+        }
+        @Override
+        public android.support.v4.app.Fragment getItem(int position)
+        {
+            switch(position)
+            {
+                case 0:
+                    return new Timeline_Review_Fragment();
+                case 1:
+                    return new Timeline_Library_Fragment();
+                default:
+                    return null;
+            }
+        }
+        @Override
+        public int getCount()
+        {
+            return 2;
+        }
     }
 }

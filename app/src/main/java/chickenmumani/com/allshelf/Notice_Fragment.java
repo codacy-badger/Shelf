@@ -1,23 +1,15 @@
 package chickenmumani.com.allshelf;
 
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.ListFragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -37,8 +29,7 @@ public class Notice_Fragment extends Fragment {
     private RecyclerView.LayoutManager mLayoutManager;
     private DatabaseReference mDatabase;
 
-    ProgressBar circle_bar;
-
+   //private ProgressBar progressBar;
 
     public Notice_Fragment() {
     }
@@ -47,8 +38,8 @@ public class Notice_Fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_notice, container, false);
-
-        //circle_bar = (ProgressBar) view.findViewById(R.id.progressbar_loading);
+       // progressBar = (ProgressBar)view.findViewById(R.id.noticeProgressBar2);
+        //progressBar.setVisibility(View.VISIBLE);
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.notice_recyclerview);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
@@ -57,10 +48,6 @@ public class Notice_Fragment extends Fragment {
 
         final ArrayList<Notice_Item> myList = new ArrayList<Notice_Item>();
 
-        final ProgressDialog dialog = ProgressDialog.show(getContext(), "",
-                "Loading... Please wait");
-
-
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference databaseReference = firebaseDatabase.getReference();
         mDatabase = FirebaseDatabase.getInstance().getReference("Notice_Item");
@@ -68,9 +55,6 @@ public class Notice_Fragment extends Fragment {
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                //circle_bar.setVisibility(View.GONE);
-
-
                 myList.clear();
                 for(DataSnapshot ds : dataSnapshot.getChildren()) {
                     Map<String,Object> map = (Map<String,Object>) ds.getValue();
@@ -78,9 +62,8 @@ public class Notice_Fragment extends Fragment {
                 }
                 Collections.sort(myList,new TimingN());
                 mAdapter = new Notice_Adapter(myList);
+                //progressBar.setVisibility(View.INVISIBLE);
                 mRecyclerView.setAdapter(mAdapter);
-                //circle_bar.setVisibility(View.INVISIBLE);
-                dialog.dismiss();
             }
 
             @Override
@@ -120,13 +103,11 @@ public class Notice_Fragment extends Fragment {
         super.onDetach();
     }
 
-    class TimingN implements Comparator<Notice_Item> {
-        @Override
-        public int compare(Notice_Item o1, Notice_Item o2) {
-            return o2.getDate().compareTo(o1.getDate());
-        }
-
-    }
-
 }
 
+class TimingN implements Comparator<Notice_Item> {
+    @Override
+    public int compare(Notice_Item o1, Notice_Item o2) {
+        return o2.getDate().compareTo(o1.getDate());
+    }
+}

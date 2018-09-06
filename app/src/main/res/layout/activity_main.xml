@@ -1,110 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/layout_main"
+    android:background="@color/colorPrimary"
+    android:orientation="vertical"
     tools:context="chickenmumani.com.allshelf.MainActivity">
 
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <com.google.android.gms.common.SignInButton
-            android:id="@+id/sign_in_button"
-            android:layout_width="307dp"
-            android:layout_height="54dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.506"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/app_logo"
-            app:layout_constraintVertical_bias="0.692">
-
-        </com.google.android.gms.common.SignInButton>
-
-        <TextView
-            android:id="@+id/mainoutresult"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_margin="10dp"
-            android:text="not provided"/>
-
-        <ScrollView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingBottom="40dp"
+            android:paddingTop="40dp">
 
-            <LinearLayout
+            <ImageView
+                android:id="@+id/imageView2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
-            <!--
-                <Button
-                    android:id="@+id/mainButton1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="TEMPPPPPPPAP"/>
+                android:layout_weight="1.0"
+                app:srcCompat="@drawable/logo2" />
 
+            <com.google.android.gms.common.SignInButton
+                android:id="@+id/sign_in_button"
+                android:layout_width="199dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.506"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/app_logo"
+                app:layout_constraintVertical_bias="0.692">
 
+            </com.google.android.gms.common.SignInButton>
 
-                <Button
-                    android:id="@+id/mainButton2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="alarmactivity"/>
+        </LinearLayout>
 
-                <Button
-                    android:id="@+id/mainButton3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="logoutpopup" />
+        <ProgressBar
+            android:id="@+id/mainProgressBar"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/textView"
+            android:layout_alignLeft="@+id/textview"
+            android:layout_alignParentBottom="true"
+            android:layout_alignRight="@+id/textView"
+            android:layout_alignStart="@+id/textview"
+            android:layout_below="@+id/button"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:progressDrawable="@drawable/circular_progress_bar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
+    </android.support.constraint.ConstraintLayout>
 
-
-                <Button
-                    android:id="@+id/mainButton4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="settingactivity"/>
-
-                <Button
-                    android:id="@+id/mainButton5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="exportactivity"/>
-
-                <Button
-                    android:id="@+id/mainButton6"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="friendsmanageactivity"/>
-
-                <Button
-                    android:id="@+id/mainButton7"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="messagepopactivity"/>
-
-
-
-                <Button
-                    android:id="@+id/mainButton8"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="naviactivity"/>
-
-                !-->
-
-            </LinearLayout>
-
-        </ScrollView>
-
-    </LinearLayout>
-
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>

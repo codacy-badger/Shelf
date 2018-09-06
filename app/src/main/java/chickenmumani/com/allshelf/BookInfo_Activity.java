@@ -240,6 +240,7 @@ public class BookInfo_Activity extends AppCompatActivity {
                     Intent intent = new Intent(BookInfo_Activity.this, Review_WriteActivity.class);
                     intent.putExtra("uid",user.getUid());
                     intent.putExtra("isbn",isbn);
+                    intent.putExtra("bookname", bookname);
                     intent.putExtra("uname",user.getDisplayName());
                     intent.putExtra("cover",user.getPhotoUrl().toString());
                     startActivity(intent);

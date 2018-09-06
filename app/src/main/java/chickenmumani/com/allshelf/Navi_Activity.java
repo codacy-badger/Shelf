@@ -118,7 +118,7 @@ public class Navi_Activity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.navi, menu);
+        //getMenuInflater().inflate(R.menu.navi, menu);
         return true;
     }
 
@@ -156,6 +156,10 @@ public class Navi_Activity extends AppCompatActivity
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.content_frame, new Notice_Fragment())
                     .commit();
+        } else if (id == R.id.nav_board) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.content_frame, new Board_Fragment())
+                    .commit();
         } else if (id == R.id.nav_security) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.content_frame, new Security_Fragment())
@@ -163,14 +167,6 @@ public class Navi_Activity extends AppCompatActivity
         } else if (id == R.id.nav_alarm) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.content_frame, new Alarm_Fragment())
-                    .commit();
-        } else if (id == R.id.nav_rank) {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.content_frame, new Rank_Fragment())
-                    .commit();
-        } else if (id == R.id.nav_center) {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.content_frame, new ClientCenter_Fragment())
                     .commit();
         }
 

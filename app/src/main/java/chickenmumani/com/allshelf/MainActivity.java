@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -33,12 +34,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final int RC_SIGN_IN = 9001;
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
-    private ProgressDialog dialog;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().setTitle("Temporary MainActivity");
+        getSupportActionBar().hide();
         setContentView(R.layout.activity_main);
 
         findViewById(R.id.sign_in_button).setOnClickListener(this);
@@ -49,6 +50,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         mAuth = FirebaseAuth.getInstance();
+
+        progressBar = (ProgressBar) findViewById(R.id.mainProgressBar);
+        progressBar.setVisibility(View.INVISIBLE);
 
         /*
 
@@ -151,15 +155,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         int i = v.getId();
         if (i == R.id.sign_in_button) {
-            dialog = ProgressDialog.show(MainActivity.this, "",
-                    "Loading... Please wait");          // 프로그레스다이얼로그 생성
+            progressBar.setVisibility(View.VISIBLE);
             signIn();
+            progressBar.setVisibility(View.INVISIBLE);
         }
     }
 
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        dialog.dismiss();
+        progressBar.setVisibility(View.INVISIBLE);
         Log.w(TAG, "start signin");
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
@@ -168,7 +172,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (user != null) {
             Log.d("w",user.getUid() + "\t" + user.getEmail() + "\t" + user.getProviderId() + user.getPhotoUrl());
             Intent nextActivityIntent = new Intent(MainActivity.this, Navi_Activity.class);
-            if(dialog != null) dialog.dismiss();
             startActivity(nextActivityIntent);
             finish();
         } else {
@@ -205,8 +208,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
-            dialog = ProgressDialog.show(MainActivity.this, "",
-                    "Loading... Please wait");
+            progressBar.setVisibility(View.VISIBLE);
             try {
                 Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
                 // Google Sign In was successful, authenticate with Firebase
@@ -215,7 +217,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             } catch (ApiException e) {
                 Log.w(TAG,"intent data" + data.toString());
                 // Google Sign In failed, update UI appropriately
-                dialog.dismiss();
+                progressBar.setVisibility(View.INVISIBLE);
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);     // 여기서 this는 Activity의 this
                 builder .setMessage("정보를 불러오는 중 문제가 발생했습니다. 다시 시도하세요.")
                         .setCancelable(false)
@@ -228,21 +230,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
 
-        TextView txtResult = (TextView)findViewById(R.id.mainoutresult);
-
         if(requestCode==1){
             if(resultCode==RESULT_OK){
                 //데이터 받기
-                String result = data.getStringExtra("result");
-                txtResult.setText("1 " + result);
+                //String result = data.getStringExtra("result");
+                //txtResult.setText("1 " + result);
             }
         }
 
         if(requestCode==2){
             if(resultCode==RESULT_OK){
                 //데이터 받기
-                String result = data.getStringExtra("result");
-                txtResult.setText("2 " + result);
+                //String result = data.getStringExtra("result");
+                //txtResult.setText("2 " + result);
             }
         }
     }
